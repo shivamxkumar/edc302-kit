@@ -214,6 +214,33 @@ th{font-weight:700;color:var(--muted);font-size:.84rem;border-bottom:1.5px solid
 .tip p{margin:0;color:var(--muted);font-size:.95rem}
 footer{padding:48px 0 60px;color:var(--muted);font-size:.88rem;text-align:center}
 
+/* ---------- pop quiz ---------- */
+.quiz-fab{
+  position:fixed;right:18px;bottom:calc(env(safe-area-inset-bottom,0px) + 18px);z-index:40;
+  display:inline-flex;align-items:center;gap:8px;border:1.5px solid var(--ink);background:var(--ink);color:var(--sheet);
+  padding:12px 18px;border-radius:999px;font:inherit;font-weight:700;font-size:.92rem;cursor:pointer;
+  box-shadow:0 10px 24px -10px #16202f66;transition:transform .15s ease;
+}
+.quiz-fab:hover{transform:translateY(-1px)}
+.quiz-fab .dot{width:8px;height:8px;border-radius:50%;background:var(--mark);flex:none}
+.quiz-overlay{position:fixed;inset:0;z-index:50;display:flex;align-items:flex-end;justify-content:center;background:#0b1220a6;padding:16px}
+.quiz-overlay[hidden]{display:none}
+@media (min-width:640px){ .quiz-overlay{align-items:center} }
+.quiz-card{
+  width:100%;max-width:460px;background:var(--sheet);border:1.5px solid var(--ink);border-radius:14px;
+  box-shadow:var(--shadow);padding:22px 24px 20px;animation:quizIn .28s cubic-bezier(.3,.5,.2,1);
+}
+@keyframes quizIn{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:none}}
+.quiz-top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px}
+.quiz-tag{font-size:.72rem;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:var(--trace);background:var(--trace-soft);padding:4px 10px;border-radius:999px}
+.quiz-close{border:0;background:none;color:var(--muted);font-size:1.4rem;line-height:1;cursor:pointer;padding:2px 8px;border-radius:6px}
+.quiz-close:hover{color:var(--ink)}
+.quiz-q{font-size:1.12rem;line-height:1.4;margin:0 0 16px;font-weight:600}
+.quiz-a{margin:0 0 18px;padding:12px 16px;border-left:3px solid var(--ok);border-radius:0 8px 8px 0;background:color-mix(in srgb,var(--ok) 8%,transparent);font-family:"STIX Two Text",serif;font-size:1.02rem;line-height:1.4}
+.quiz-a[hidden]{display:none}
+.quiz-actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.quiz-count{margin-left:auto;font-size:.82rem;color:var(--muted)}
+
 @media (max-width:860px){
   .hero-grid,.cols{grid-template-columns:1fr}
   .tips{grid-template-columns:1fr}
@@ -231,7 +258,7 @@ footer{padding:48px 0 60px;color:var(--muted);font-size:.88rem;text-align:center
   html{scroll-behavior:auto}
 }
 @media print{
-  .nav,.hero-actions,.controls,.filters,.card-bar,.paper-bar .timer,.prob-actions{display:none!important}
+  .nav,.hero-actions,.controls,.filters,.card-bar,.paper-bar .timer,.prob-actions,.quiz-fab,.quiz-overlay{display:none!important}
   body{background:#fff}
   .steps li{opacity:1;transform:none}
   .key{max-height:none}
@@ -549,6 +576,24 @@ footer{padding:48px 0 60px;color:var(--muted);font-size:.88rem;text-align:center
 
 <footer>Built from your EDC 302 slides (Diode, Rectifier, BJT, MOSFET). Feedback follows Sedra &amp; Smith, Ch. 11. Best of luck tomorrow.</footer>
 
+<button class="quiz-fab" id="quizFab" aria-haspopup="dialog"><span class="dot"></span>Pop quiz</button>
+
+<div class="quiz-overlay" id="quizOverlay" hidden>
+  <div class="quiz-card" role="dialog" aria-modal="true" aria-labelledby="quizQ">
+    <div class="quiz-top">
+      <span class="quiz-tag" id="quizTag">BJT</span>
+      <button class="quiz-close" id="quizClose" aria-label="Close pop quiz">&times;</button>
+    </div>
+    <p class="quiz-q" id="quizQ"></p>
+    <p class="quiz-a" id="quizA" hidden></p>
+    <div class="quiz-actions">
+      <button class="btn small" id="quizReveal" aria-expanded="false">Reveal answer</button>
+      <button class="btn small ghost" id="quizNext">Next question</button>
+      <span class="quiz-count" id="quizCount"></span>
+    </div>
+  </div>
+</div>
+
 <script>
 /* ---------- storage ---------- */
 const store = {
@@ -836,6 +881,59 @@ const io = new IntersectionObserver(es => es.forEach(e => {
     const a = links.find(l => l.classList.contains('active')); if (a){ const nl = document.getElementById('navLinks'); nl.scrollLeft = a.offsetLeft - nl.clientWidth / 2 + a.clientWidth / 2; } }
 }), {rootMargin:'-40% 0px -55% 0px'});
 document.querySelectorAll('section.block').forEach(s => io.observe(s));
+
+/* ---------- pop quiz ---------- */
+const bonusQuiz = [
+  {t:'BJT', q:'In which mode of operation is a BJT used as a fully-ON voltage-controlled switch?', a:'Saturation mode — both the EBJ and CBJ are forward biased.'},
+  {t:'BJT', q:'What are the two components that make up the base current i<sub>B</sub> in active mode?', a:'i<sub>B1</sub>: holes injected from the base into the emitter. i<sub>B2</sub>: recombination in the base of electrons injected from the emitter.'},
+  {t:'BJT', q:'Does β increase or decrease as temperature rises?', a:'β increases with temperature.'},
+  {t:'BJT', q:'Why is i<sub>C</sub> almost independent of v<sub>CB</sub> in active mode (ignoring the Early effect)?', a:'Because i<sub>C</sub> = I<sub>S</sub>e<sup>v<sub>BE</sub>/V<sub>T</sub></sup> depends only on v<sub>BE</sub>, as long as the CBJ stays reverse biased.'},
+  {t:'BJT', q:'A transistor has β = 60. If it is driven with I<sub>B</sub> = 50 μA but the circuit can only supply I<sub>C</sub> = 2 mA, what mode is it in?', a:'β·I<sub>B</sub> = 3 mA, which exceeds the 2 mA the circuit can supply — the BJT is saturated, not active.'},
+  {t:'MOSFET', q:'What single comparison tells you whether an NMOS is in triode or saturation?', a:'Compare v<sub>DS</sub> to v<sub>OV</sub>: triode if v<sub>DS</sub> &lt; v<sub>OV</sub>, saturation if v<sub>DS</sub> ≥ v<sub>OV</sub>.'},
+  {t:'MOSFET', q:'If W/L doubles while k′<sub>n</sub> stays fixed, what happens to k<sub>n</sub>?', a:'k<sub>n</sub> doubles, since k<sub>n</sub> = k′<sub>n</sub>(W/L).'},
+  {t:'MOSFET', q:'Why is the DC gate current of a MOSFET zero?', a:'The gate is separated from the channel by an insulating SiO₂ oxide layer, so no DC current can flow into it.'},
+  {t:'MOSFET', q:'What physically happens at the drain end of the channel when v<sub>DS</sub> = v<sub>OV</sub>?', a:'The channel pinches off — its depth at the drain end goes to zero. This marks the triode/saturation boundary.'},
+  {t:'MOSFET', q:'Why does NMOS usually give more gain than PMOS of the same dimensions?', a:'Electron mobility μ<sub>n</sub> is roughly 2–4× hole mobility μ<sub>p</sub>, so k′<sub>n</sub> &gt; k′<sub>p</sub> for the same W/L.'},
+  {t:'Feedback', q:'If 1 + Aβ = 100, what is the amount of feedback in decibels?', a:'20 log₁₀(100) = 40 dB.'},
+  {t:'Feedback', q:'Which feedback topology is the natural choice for a good current amplifier?', a:'Shunt-series feedback — it samples the output current and mixes a current at the input.'},
+  {t:'Feedback', q:'How does negative feedback affect nonlinear distortion, and what is the cost?', a:'Distortion shrinks by roughly (1+Aβ); the cost is a matching drop in gain.'},
+  {t:'Feedback', q:'What stays constant when negative feedback trades gain for bandwidth?', a:'The gain–bandwidth product (GBW) — gain falls by (1+Aβ) while bandwidth rises by the same factor.'},
+  {t:'Feedback', q:'In a non-inverting op-amp with R₁ to ground and R₂ as the feedback resistor, what is β?', a:'β = R₁/(R₁+R₂), so for large loop gain A<sub>f</sub> ≈ 1 + R₂/R₁.'},
+  {t:'Rectifier', q:'What PIV rating does each diode need in a full-wave centre-tapped rectifier?', a:'2V<sub>m</sub> — twice the peak secondary voltage of each half-winding.'},
+  {t:'Rectifier', q:'Why is a full-wave rectifier more efficient than a half-wave one?', a:'It conducts on both halves of the AC cycle, giving higher DC output, lower ripple, and ≈81.2% efficiency vs 40.6% for half-wave.'},
+  {t:'Rectifier', q:'What does adding a capacitor filter after a rectifier do?', a:'It charges close to V<sub>m</sub> and holds the output up between peaks, reducing ripple.'},
+  {t:'Rectifier', q:"How much does a diode's forward voltage rise per decade increase in forward current?", a:'About 60 mV per decade (2.3V<sub>T</sub> ≈ 60 mV at room temperature).'},
+  {t:'Rectifier', q:'Besides breakdown voltage, what limits the current a Zener diode can safely carry?', a:'Its power rating: I<sub>max</sub> = P/V<sub>Z</sub>, so V<sub>Z</sub>×I<sub>Z</sub> must stay under the rated power.'}
+];
+let quizOrder = [], quizPos = 0;
+function shuffleQuiz(){ quizOrder = bonusQuiz.map((_, i) => i).sort(() => Math.random() - .5); quizPos = 0; }
+shuffleQuiz();
+const quizOverlay = document.getElementById('quizOverlay');
+const quizTag = document.getElementById('quizTag'), quizQ = document.getElementById('quizQ'), quizA = document.getElementById('quizA');
+const quizReveal = document.getElementById('quizReveal'), quizCount = document.getElementById('quizCount');
+function showQuiz(i){
+  const item = bonusQuiz[quizOrder[i]];
+  quizTag.textContent = item.t; quizQ.innerHTML = item.q; quizA.innerHTML = item.a;
+  quizA.hidden = true; quizReveal.textContent = 'Reveal answer'; quizReveal.setAttribute('aria-expanded', 'false');
+  quizCount.textContent = (i + 1) + ' of ' + bonusQuiz.length;
+}
+function openQuiz(){
+  if (quizPos >= quizOrder.length) shuffleQuiz();
+  showQuiz(quizPos); quizOverlay.hidden = false; document.getElementById('quizClose').focus();
+}
+function closeQuiz(){ quizOverlay.hidden = true; document.getElementById('quizFab').focus(); }
+document.getElementById('quizFab').onclick = openQuiz;
+document.getElementById('quizClose').onclick = closeQuiz;
+quizOverlay.addEventListener('click', e => { if (e.target === quizOverlay) closeQuiz(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && !quizOverlay.hidden) closeQuiz(); });
+quizReveal.onclick = () => {
+  const open = quizReveal.getAttribute('aria-expanded') === 'true';
+  quizA.hidden = open; quizReveal.textContent = open ? 'Reveal answer' : 'Hide answer'; quizReveal.setAttribute('aria-expanded', String(!open));
+};
+document.getElementById('quizNext').onclick = () => {
+  quizPos++; if (quizPos >= quizOrder.length) shuffleQuiz();
+  showQuiz(quizPos);
+};
 </script>
 </body>
 </html>
