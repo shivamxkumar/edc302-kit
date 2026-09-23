@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>EDC 302 Midsem Kit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=STIX+Two+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#EDF1F6; --sheet:#FFFFFF; --ink:#16202F; --muted:#586577; --grid:#D9E0EA;
+  --trace:#1D5BD6; --trace-soft:#1D5BD622; --mark:#FFE35A; --alert:#C9382F; --ok:#1C8456;
+  --line:#CBD4E0; --shadow:0 1px 0 #16202F14, 0 8px 24px -12px #16202F30;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0E1420; --sheet:#161F2E; --ink:#E4EAF3; --muted:#98A5B9; --grid:#1D2839;
+    --trace:#76A3FF; --trace-soft:#76A3FF22; --mark:#8C7414; --alert:#FF7C71; --ok:#4FC98F;
+    --line:#2A3850; --shadow:0 1px 0 #00000055, 0 10px 28px -14px #000000aa;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0E1420; --sheet:#161F2E; --ink:#E4EAF3; --muted:#98A5B9; --grid:#1D2839;
+  --trace:#76A3FF; --trace-soft:#76A3FF22; --mark:#8C7414; --alert:#FF7C71; --ok:#4FC98F;
+  --line:#2A3850; --shadow:0 1px 0 #00000055, 0 10px 28px -14px #000000aa;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{height:100%;scroll-behavior:smooth;scroll-padding-top:calc(env(safe-area-inset-top,0px) + 76px)}
+body{
+  margin:0;min-height:100%;color:var(--ink);
+  background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:28px 28px;background-position:-1px -1px;
+  font-family:"Archivo",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  font-size:17px;line-height:1.55;font-variation-settings:"wdth" 100;
+  -webkit-font-smoothing:antialiased;
+}
+.eq,.math{font-family:"STIX Two Text","Cambria Math","Times New Roman",serif}
+.math{font-style:italic;font-size:1.06em}
+sub,sup{font-size:.72em;line-height:0}
+a{color:var(--trace)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--trace);outline-offset:2px;border-radius:4px}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+
+/* ---------- HERO ---------- */
+.hero{padding:56px 0 40px}
+.hero-grid{display:grid;grid-template-columns:1.05fr 1fr;gap:40px;align-items:center}
+.hero h1{
+  font-size:clamp(2.6rem,6.2vw,4.6rem);line-height:.95;margin:0 0 18px;font-weight:800;
+  font-variation-settings:"wdth" 125;letter-spacing:-.01em;
+}
+.hero h1 span{display:block;font-weight:500;font-variation-settings:"wdth" 70;color:var(--trace);font-size:.62em;letter-spacing:0;margin-top:6px}
+.hero p{max-width:34em;color:var(--muted);margin:0 0 22px}
+.hero-actions{display:flex;flex-wrap:wrap;gap:10px}
+.btn{
+  display:inline-flex;align-items:center;gap:8px;border:1.5px solid var(--ink);background:var(--ink);color:var(--sheet);
+  padding:10px 18px;border-radius:999px;font-weight:600;cursor:pointer;text-decoration:none;font-size:.95rem;
+  transition:transform .15s ease, background .15s ease;
+}
+.btn:hover{transform:translateY(-1px)}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn.small{padding:6px 14px;font-size:.85rem}
+
+.scope{background:var(--sheet);border:1.5px solid var(--ink);border-radius:10px;padding:16px 16px 12px;box-shadow:var(--shadow)}
+.scope-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:6px}
+.scope-head strong{font-size:.95rem}
+.scope-head small{color:var(--muted)}
+.scope svg{width:100%;height:auto;display:block}
+.axis{stroke:var(--ink);stroke-width:1.4}
+.tick{fill:var(--muted);font-size:11px;font-family:"Archivo",sans-serif}
+.curve-bg{fill:none;stroke:var(--line);stroke-width:1.6}
+.curve{fill:none;stroke:var(--trace);stroke-width:3;stroke-linecap:round}
+.boundary{fill:none;stroke:var(--alert);stroke-width:1.4;stroke-dasharray:5 5}
+.sat-zone{fill:var(--trace-soft)}
+.dot{fill:var(--alert);stroke:var(--sheet);stroke-width:2.5}
+.draw{stroke-dasharray:900;stroke-dashoffset:900;animation:draw 1.4s cubic-bezier(.6,.1,.2,1) forwards}
+.draw.d2{animation-delay:.15s}.draw.d3{animation-delay:.3s}.draw.d4{animation-delay:.45s}.draw.d5{animation-delay:.7s}
+@keyframes draw{to{stroke-dashoffset:0}}
+.controls{display:grid;grid-template-columns:1fr 1fr;gap:12px 18px;margin-top:10px}
+.controls label{display:block;font-size:.82rem;color:var(--muted)}
+.controls output{font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;accent-color:var(--trace);margin:4px 0 0}
+.readout{
+  margin-top:12px;display:flex;justify-content:space-between;align-items:center;gap:10px;
+  border-top:1px dashed var(--line);padding-top:10px;font-size:.95rem;
+}
+.region{font-weight:700;padding:3px 12px;border-radius:999px;background:var(--trace-soft);color:var(--trace);transition:background .2s,color .2s}
+.region.triode{background:#FFE35A55;color:var(--ink)}
+.region.cut{background:var(--line);color:var(--muted)}
+.readout .val{font-variant-numeric:tabular-nums;font-weight:600}
+
+/* ---------- NAV ---------- */
+.nav{position:sticky;top:0;z-index:20;padding-top:env(safe-area-inset-top,0px);background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;gap:14px;height:62px}
+.nav-links{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;flex:1}
+.nav-links::-webkit-scrollbar{display:none}
+.nav-links a{white-space:nowrap;text-decoration:none;color:var(--muted);padding:7px 12px;border-radius:999px;font-weight:600;font-size:.92rem;transition:background .15s,color .15s}
+.nav-links a:hover{color:var(--ink)}
+.nav-links a.active{background:var(--ink);color:var(--sheet)}
+.progress{display:flex;align-items:center;gap:8px;font-size:.82rem;color:var(--muted);white-space:nowrap}
+.ring{width:34px;height:34px;transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:4}
+.ring .bg{stroke:var(--line)}
+.ring .fg{stroke:var(--ok);stroke-linecap:round;transition:stroke-dashoffset .5s ease}
+.theme-btn{border:1.5px solid var(--line);background:var(--sheet);border-radius:999px;width:36px;height:36px;cursor:pointer;flex:none}
+
+/* ---------- SECTIONS ---------- */
+section.block{padding:56px 0 8px}
+.sec-head{display:flex;justify-content:space-between;align-items:end;gap:16px;flex-wrap:wrap;margin-bottom:20px}
+.sec-head h2{font-size:clamp(1.8rem,3.6vw,2.5rem);line-height:1.05;margin:0;font-weight:800;font-variation-settings:"wdth" 118}
+.sec-head p{margin:6px 0 0;color:var(--muted);max-width:40em}
+.sheet{background:var(--sheet);border:1px solid var(--line);border-radius:8px;box-shadow:var(--shadow)}
+
+/* tabs */
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.tab,.chip{border:1.5px solid var(--line);background:var(--sheet);padding:7px 15px;border-radius:999px;cursor:pointer;font-weight:600;font-size:.9rem;color:var(--muted);transition:all .15s}
+.tab[aria-selected=true],.chip.on{border-color:var(--ink);background:var(--ink);color:var(--sheet)}
+.panel{padding:26px 28px}
+.panel[hidden]{display:none}
+.panel.enter{animation:panelIn .35s ease}
+@keyframes panelIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.panel h3{font-size:1.15rem;margin:22px 0 8px;font-variation-settings:"wdth" 110}
+.panel h3:first-child{margin-top:0}
+.panel ul{margin:0;padding-left:1.2em}
+.panel li{margin:4px 0;max-width:70ch}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:10px 34px}
+.formula{
+  font-family:"STIX Two Text",serif;font-size:1.12rem;background:var(--paper);border-left:3px solid var(--trace);
+  padding:9px 14px;margin:8px 0;border-radius:0 6px 6px 0;overflow-x:auto;white-space:nowrap;
+}
+.formula small{font-family:"Archivo",sans-serif;color:var(--muted);font-size:.8rem;margin-left:10px}
+.hl{background:linear-gradient(transparent 58%,var(--mark) 58%);padding:0 2px}
+.table-wrap{overflow-x:auto;margin:10px 0}
+table{border-collapse:collapse;width:100%;font-size:.93rem;min-width:460px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:700;color:var(--muted);font-size:.84rem;border-bottom:1.5px solid var(--ink)}
+.trick{margin-top:14px;padding:12px 16px;border:1.5px dashed var(--trace);border-radius:8px;font-size:.95rem}
+
+/* problems */
+.filters{display:flex;gap:6px;flex-wrap:wrap}
+.problems{display:grid;gap:12px}
+.prob{padding:18px 20px;border-left:4px solid var(--line);transition:border-color .25s}
+.prob.done{border-left-color:var(--ok)}
+.prob-top{display:flex;gap:12px;align-items:flex-start}
+.tag{flex:none;font-size:.72rem;font-weight:700;padding:3px 9px;border-radius:999px;background:var(--paper);color:var(--muted);margin-top:3px}
+.prob-q{flex:1}
+.prob-q b{font-variant-numeric:tabular-nums}
+.prob-actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;align-items:center}
+.check{display:inline-flex;align-items:center;gap:7px;font-size:.88rem;color:var(--muted);cursor:pointer;user-select:none}
+.check input{width:18px;height:18px;accent-color:var(--ok);cursor:pointer}
+.steps{list-style:none;padding:0;margin:14px 0 0;counter-reset:s}
+.steps li{
+  counter-increment:s;position:relative;padding:6px 0 6px 34px;border-top:1px dashed var(--line);
+  opacity:0;transform:translateX(-8px);transition:opacity .35s ease, transform .35s ease;
+}
+.steps li::before{content:counter(s);position:absolute;left:0;top:7px;width:22px;height:22px;border-radius:50%;background:var(--trace-soft);color:var(--trace);font-size:.75rem;font-weight:700;display:grid;place-items:center}
+.steps li.show{opacity:1;transform:none}
+.steps li.final{font-weight:600}
+.steps li.final::before{content:"✓";background:var(--ok);color:var(--sheet)}
+
+/* theory */
+.theory{list-style:none;padding:0;margin:0;counter-reset:t}
+.theory li{counter-increment:t;display:flex;gap:14px;align-items:flex-start;padding:14px 20px;border-bottom:1px solid var(--line);transition:background .2s}
+.theory li:last-child{border-bottom:0}
+.theory li::before{content:counter(t);font-weight:800;font-variation-settings:"wdth" 125;color:var(--trace);min-width:1.6em;font-size:1.05rem}
+.theory li.done{background:color-mix(in srgb,var(--ok) 8%,transparent)}
+.theory li.done span{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--ok)}
+.theory span{flex:1}
+.theory input{width:20px;height:20px;accent-color:var(--ok);margin-top:3px;cursor:pointer;flex:none}
+.tname{font-size:.72rem;color:var(--muted);font-weight:700;display:block;margin-bottom:2px}
+
+/* flashcards */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
+.card{perspective:900px;height:148px;cursor:pointer;border:0;background:none;padding:0;text-align:left}
+.card-inner{position:relative;width:100%;height:100%;transition:transform .55s cubic-bezier(.4,.2,.2,1);transform-style:preserve-3d}
+.card.flip .card-inner{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:8px;padding:14px 16px;display:flex;flex-direction:column;justify-content:space-between;border:1px solid var(--line);box-shadow:var(--shadow)}
+.front{background:var(--sheet)}
+.front .n{font-size:.75rem;color:var(--muted);font-weight:700}
+.front .q{font-weight:600;line-height:1.35;font-size:.98rem}
+.front .hint{font-size:.75rem;color:var(--muted)}
+.back{background:var(--ink);color:var(--sheet);transform:rotateY(180deg);justify-content:center}
+.back .a{font-family:"STIX Two Text",serif;font-size:1.2rem;line-height:1.3}
+.card-bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.count{font-size:.88rem;color:var(--muted);margin-left:auto}
+
+/* papers */
+.paper-bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1.5px solid var(--ink)}
+.timer{display:flex;align-items:center;gap:10px}
+.clock{font-size:1.7rem;font-weight:800;font-variant-numeric:tabular-nums;font-variation-settings:"wdth" 80;min-width:4.2ch}
+.clock.low{color:var(--alert)}
+.paper{padding:22px 26px 26px}
+.paper-meta{display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;color:var(--muted);font-size:.9rem;margin-bottom:18px;border-bottom:1px dashed var(--line);padding-bottom:10px}
+.pq{display:grid;grid-template-columns:3.2em 1fr auto;gap:10px;padding:14px 0;border-bottom:1px solid var(--line)}
+.pq:last-of-type{border-bottom:0}
+.pq .qn{font-weight:800;color:var(--trace)}
+.pq .mk{font-weight:700;color:var(--muted);font-size:.9rem;white-space:nowrap}
+.pq ol{margin:6px 0 0;padding-left:1.4em}
+.or{display:inline-block;margin:6px 0;font-weight:700;font-size:.8rem;color:var(--alert)}
+.key{margin-top:16px;overflow:hidden;max-height:0;transition:max-height .6s ease}
+.key.open{max-height:1400px}
+.key-inner{border:1.5px solid var(--ok);border-radius:8px;padding:14px 18px;background:color-mix(in srgb,var(--ok) 6%,transparent)}
+.key-inner h4{margin:0 0 6px;color:var(--ok)}
+.key-inner p{margin:6px 0}
+
+/* tips */
+.tips{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.tip{padding:18px 20px}
+.tip strong{display:block;margin-bottom:4px;font-size:1.02rem}
+.tip p{margin:0;color:var(--muted);font-size:.95rem}
+footer{padding:48px 0 60px;color:var(--muted);font-size:.88rem;text-align:center}
+
+@media (max-width:860px){
+  .hero-grid,.cols{grid-template-columns:1fr}
+  .tips{grid-template-columns:1fr}
+  .hero{padding-top:32px}
+  .panel{padding:20px 18px}
+  .paper{padding:18px}
+  .pq{grid-template-columns:2.6em 1fr}
+  .pq .mk{grid-column:2}
+  .progress span{display:none}
+}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .draw{stroke-dashoffset:0}
+  .steps li{opacity:1;transform:none}
+  html{scroll-behavior:auto}
+}
+@media print{
+  .nav,.hero-actions,.controls,.filters,.card-bar,.paper-bar .timer,.prob-actions{display:none!important}
+  body{background:#fff}
+  .steps li{opacity:1;transform:none}
+  .key{max-height:none}
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <h1>EDC 302 midsem kit<span>BJT, MOSFET, feedback, diodes</span></h1>
+      <p>Short notes, solved numericals, theory checklist, one-mark flashcards and two timed 25-mark papers. Tick things off as you revise; your progress stays on this device.</p>
+      <div class="hero-actions">
+        <a class="btn" href="#notes">Start revising</a>
+        <a class="btn ghost" href="#papers">Take a mock paper</a>
+      </div>
+    </div>
+
+    <div class="scope" aria-label="Interactive NMOS i_D versus v_DS plot">
+      <div class="scope-head">
+        <strong>NMOS i<sub>D</sub>–v<sub>DS</sub>, live</strong>
+        <small>k<sub>n</sub> = 2 mA/V²</small>
+      </div>
+      <svg viewBox="0 0 420 290" id="plot" role="img" aria-label="Drain current curves showing triode and saturation regions">
+        <path id="satZone" class="sat-zone"/>
+        <g id="bgCurves"></g>
+        <path id="boundary" class="boundary draw d5"/>
+        <path id="mainCurve" class="curve draw d3"/>
+        <line class="axis" x1="48" y1="16" x2="48" y2="252"/>
+        <line class="axis" x1="48" y1="252" x2="408" y2="252"/>
+        <g id="ticks"></g>
+        <circle id="dot" class="dot" r="7" cx="48" cy="252"/>
+      </svg>
+      <div class="controls">
+        <label>Overdrive v<sub>OV</sub> = <output id="ovOut">0.50</output> V
+          <input type="range" id="ov" min="0" max="1" step="0.01" value="0.5"></label>
+        <label>Drain voltage v<sub>DS</sub> = <output id="dsOut">1.20</output> V
+          <input type="range" id="ds" min="0" max="2" step="0.01" value="1.2"></label>
+      </div>
+      <div class="readout">
+        <span class="region" id="region">Saturation</span>
+        <span class="val" id="idOut">i<sub>D</sub> = 0.250 mA</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<nav class="nav" aria-label="Sections">
+  <div class="wrap">
+    <div class="nav-links" id="navLinks">
+      <a href="#notes">Notes</a>
+      <a href="#solved">Solved numericals</a>
+      <a href="#theory">Theory</a>
+      <a href="#onemark">One-markers</a>
+      <a href="#papers">Mock papers</a>
+      <a href="#tips">Exam tips</a>
+    </div>
+    <div class="progress" title="Revision progress">
+      <svg class="ring" viewBox="0 0 40 40"><circle class="bg" cx="20" cy="20" r="16"/><circle class="fg" id="ringFg" cx="20" cy="20" r="16" stroke-dasharray="100.5" stroke-dashoffset="100.5"/></svg>
+      <span id="progText">0 of 0 done</span>
+    </div>
+    <button class="theme-btn" id="themeBtn" aria-label="Toggle dark mode">◐</button>
+  </div>
+</nav>
+
+<main class="wrap">
+
+<!-- NOTES -->
+<section class="block" id="notes">
+  <div class="sec-head">
+    <div><h2>Short notes</h2><p>Everything on one screen per topic. Highlighted values are the ones examiners love.</p></div>
+  </div>
+  <div class="tabs" role="tablist" aria-label="Note topics">
+    <button class="tab" role="tab" aria-selected="false" data-tab="n-bjt">BJT</button>
+    <button class="tab" role="tab" aria-selected="false" data-tab="n-mos">MOSFET</button>
+    <button class="tab" role="tab" aria-selected="false" data-tab="n-fb">Feedback</button>
+    <button class="tab" role="tab" aria-selected="false" data-tab="n-diode">Diode &amp; rectifier</button>
+  </div>
+
+  <div class="sheet">
+  <!-- BJT -->
+  <div class="panel" id="n-bjt" role="tabpanel">
+    <h3>Structure</h3>
+    <ul>
+      <li>npn or pnp; two junctions, EBJ and CBJ.</li>
+      <li>Emitter <span class="hl">heavily doped</span>, base <span class="hl">very thin, lightly doped</span>, collector moderately doped.</li>
+      <li>Emitter injects, base controls, collector collects.</li>
+    </ul>
+    <h3>Modes of operation</h3>
+    <div class="table-wrap"><table>
+      <tr><th>Mode</th><th>EBJ</th><th>CBJ</th><th>Use</th></tr>
+      <tr><td>Cutoff</td><td>Reverse</td><td>Reverse</td><td>Switch OFF</td></tr>
+      <tr><td><b>Active</b></td><td>Forward</td><td>Reverse</td><td>Amplifier</td></tr>
+      <tr><td>Saturation</td><td>Forward</td><td>Forward</td><td>Switch ON</td></tr>
+      <tr><td>Reverse active</td><td>Reverse</td><td>Forward</td><td>Rarely used</td></tr>
+    </table></div>
+    <div class="cols">
+      <div>
+        <h3>Active-mode equations</h3>
+        <div class="formula">i<sub>C</sub> = I<sub>S</sub> e<sup>v<sub>BE</sub>/V<sub>T</sub></sup><small>independent of v<sub>CB</sub></small></div>
+        <div class="formula">i<sub>B</sub> = i<sub>C</sub>/β <small>β ≈ 50–200</small></div>
+        <div class="formula">i<sub>E</sub> = i<sub>C</sub> + i<sub>B</sub> = (β+1) i<sub>B</sub></div>
+        <div class="formula">α = β/(β+1), &nbsp; β = α/(1−α)</div>
+        <p>β = 100 gives <span class="hl">α ≈ 0.99</span>. Base current has two parts: i<sub>B1</sub> (holes injected into the emitter) and i<sub>B2</sub> (recombination in the base).</p>
+      </div>
+      <div>
+        <h3>Saturation</h3>
+        <ul>
+          <li>npn stays active while v<sub>CB</sub> ≥ −0.4 V.</li>
+          <li>Below that, CBJ is forward biased, i<sub>C</sub> falls below βi<sub>B</sub>.</li>
+        </ul>
+        <div class="formula">V<sub>CE(sat)</sub> = V<sub>BE</sub> − V<sub>BC</sub> ≈ 0.2–0.3 V</div>
+        <div class="formula">β<sub>forced</sub> = I<sub>C(sat)</sub>/I<sub>B</sub> &lt; β</div>
+        <h3>Early effect</h3>
+        <p>Base-width modulation: i<sub>C</sub> rises slightly with v<sub>CE</sub>.</p>
+        <div class="formula">i<sub>C</sub> = I<sub>S</sub>e<sup>v<sub>BE</sub>/V<sub>T</sub></sup>(1 + v<sub>CE</sub>/V<sub>A</sub>), &nbsp; r<sub>o</sub> = V<sub>A</sub>/I<sub>C</sub></div>
+      </div>
+    </div>
+    <h3>Remember</h3>
+    <ul>
+      <li>I<sub>CBO</sub>: collector-base reverse current with emitter open, nA range, <span class="hl">doubles every 10 °C</span>.</li>
+      <li>V<sub>BE</sub> falls about <span class="hl">2 mV/°C</span> at constant current.</li>
+      <li>Large-signal models: voltage-controlled source (I<sub>S</sub>e<sup>v<sub>BE</sub>/V<sub>T</sub></sup>) or current-controlled (αi<sub>E</sub> or βi<sub>B</sub>).</li>
+    </ul>
+  </div>
+
+  <!-- MOSFET -->
+  <div class="panel" id="n-mos" role="tabpanel" hidden>
+    <div class="cols">
+      <div>
+        <h3>Structure and channel</h3>
+        <ul>
+          <li>p-substrate, n⁺ source and drain, SiO₂ gate oxide (t<sub>ox</sub> 1–10 nm), four terminals G, S, D, B.</li>
+          <li>v<sub>GS</sub> = 0: two back-to-back diodes, R<sub>DS</sub> ≈ 10¹² Ω.</li>
+          <li>v<sub>GS</sub> &gt; V<sub>t</sub>: holes repelled, electrons attracted, an inverted n-channel forms. V<sub>t</sub> ≈ 0.3–1.0 V.</li>
+          <li>Gate current <span class="hl">i<sub>G</sub> = 0</span>, so i<sub>S</sub> = i<sub>D</sub>.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Key parameters</h3>
+        <div class="formula">v<sub>OV</sub> = v<sub>GS</sub> − V<sub>t</sub></div>
+        <div class="formula">|Q| = C<sub>ox</sub> W L v<sub>OV</sub></div>
+        <div class="formula">C<sub>ox</sub> = ε<sub>ox</sub>/t<sub>ox</sub>, &nbsp; ε<sub>ox</sub> = 3.45×10⁻¹¹ F/m</div>
+        <div class="formula">k′<sub>n</sub> = μ<sub>n</sub>C<sub>ox</sub>, &nbsp; k<sub>n</sub> = k′<sub>n</sub>(W/L)<small>A/V²</small></div>
+      </div>
+    </div>
+    <h3>Regions</h3>
+    <div class="table-wrap"><table>
+      <tr><th>Region</th><th>Condition</th><th>i<sub>D</sub></th></tr>
+      <tr><td>Cutoff</td><td>v<sub>GS</sub> &lt; V<sub>t</sub></td><td class="eq">0</td></tr>
+      <tr><td>Triode</td><td>v<sub>DS</sub> &lt; v<sub>OV</sub> (v<sub>GD</sub> &gt; V<sub>t</sub>)</td><td class="eq">k′<sub>n</sub>(W/L)[v<sub>OV</sub>v<sub>DS</sub> − ½v<sub>DS</sub>²]</td></tr>
+      <tr><td>Saturation</td><td>v<sub>DS</sub> ≥ v<sub>OV</sub> (v<sub>GD</sub> ≤ V<sub>t</sub>)</td><td class="eq">½k′<sub>n</sub>(W/L)v<sub>OV</sub>²</td></tr>
+    </table></div>
+    <div class="cols">
+      <div>
+        <h3>Small v<sub>DS</sub> and pinch-off</h3>
+        <div class="formula">r<sub>DS</sub> = 1 / [k′<sub>n</sub>(W/L)v<sub>OV</sub>]</div>
+        <ul>
+          <li>As v<sub>DS</sub> rises the channel tapers; at v<sub>DS</sub> = v<sub>OV</sub> the drain-end depth is zero (pinch-off).</li>
+          <li>Pinch-off does <b>not</b> block current; electrons are swept across the depletion region.</li>
+          <li>Triode/saturation boundary: i<sub>D</sub> = ½k<sub>n</sub>v<sub>DS</sub>².</li>
+        </ul>
+      </div>
+      <div>
+        <h3>PMOS and CMOS</h3>
+        <ul>
+          <li>PMOS: n-substrate, p⁺ S/D, V<sub>tp</sub> negative, conducts when v<sub>SG</sub> ≥ |V<sub>tp</sub>|.</li>
+          <li>k′<sub>p</sub> = μ<sub>p</sub>C<sub>ox</sub>, with <span class="hl">μ<sub>p</sub> ≈ 0.25–0.5 μ<sub>n</sub></span>, so NMOS is faster with more gain.</li>
+          <li>CMOS: both on one chip, PMOS in an n-well, isolated by thick oxide.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEEDBACK -->
+  <div class="panel" id="n-fb" role="tabpanel" hidden>
+    <div class="cols">
+      <div>
+        <h3>General structure</h3>
+        <ul>
+          <li>Feedback signal x<sub>f</sub> = βx<sub>o</sub>, mixer gives x<sub>i</sub> = x<sub>s</sub> − x<sub>f</sub>, output x<sub>o</sub> = Ax<sub>i</sub>.</li>
+        </ul>
+        <div class="formula">A<sub>f</sub> = A / (1 + Aβ)</div>
+        <ul>
+          <li>Loop gain = Aβ. Amount of feedback = 1 + Aβ.</li>
+          <li>If Aβ ≫ 1, <span class="hl">A<sub>f</sub> ≈ 1/β</span>: set by passive parts only.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Properties of negative feedback</h3>
+        <div class="formula">dA<sub>f</sub>/A<sub>f</sub> = (dA/A) / (1+Aβ)<small>desensitivity</small></div>
+        <div class="formula">f<sub>Hf</sub> = f<sub>H</sub>(1+Aβ), &nbsp; f<sub>Lf</sub> = f<sub>L</sub>/(1+Aβ)</div>
+        <ul>
+          <li>Gain-bandwidth product stays constant.</li>
+          <li>Noise reduction needs a clean pre-amp stage; SNR improves by its gain.</li>
+          <li>Reduces nonlinear distortion. Cost: gain drops by (1+Aβ).</li>
+        </ul>
+      </div>
+    </div>
+    <h3>Four topologies</h3>
+    <div class="table-wrap"><table>
+      <tr><th>Topology</th><th>Amplifier</th><th>Samples</th><th>Mixes</th><th>R<sub>in</sub></th><th>R<sub>out</sub></th></tr>
+      <tr><td><b>Series-shunt</b></td><td>Voltage</td><td>Voltage</td><td>Voltage</td><td>× (1+Aβ) ↑</td><td>÷ (1+Aβ) ↓</td></tr>
+      <tr><td><b>Series-series</b></td><td>Transconductance</td><td>Current</td><td>Voltage</td><td>× (1+Aβ) ↑</td><td>× (1+Aβ) ↑</td></tr>
+      <tr><td><b>Shunt-shunt</b></td><td>Transresistance</td><td>Voltage</td><td>Current</td><td>÷ (1+Aβ) ↓</td><td>÷ (1+Aβ) ↓</td></tr>
+      <tr><td><b>Shunt-series</b></td><td>Current</td><td>Current</td><td>Current</td><td>÷ (1+Aβ) ↓</td><td>× (1+Aβ) ↑</td></tr>
+    </table></div>
+    <div class="trick"><b>Memory trick:</b> series raises resistance, shunt lowers it. First word is the input side, second word the output side. Non-inverting op-amp is series-shunt with β = R₁/(R₁+R₂), so A<sub>f</sub> ≈ 1 + R₂/R₁.</div>
+  </div>
+
+  <!-- DIODE -->
+  <div class="panel" id="n-diode" role="tabpanel" hidden>
+    <div class="cols">
+      <div>
+        <h3>Diode</h3>
+        <ul>
+          <li>Ideal: reverse → open circuit, forward → short circuit.</li>
+          <li>Regions: forward (v &gt; 0), reverse (v &lt; 0), breakdown (v &lt; −V<sub>BR</sub>).</li>
+        </ul>
+        <div class="formula">i = I<sub>S</sub>(e<sup>v/V<sub>T</sub></sup> − 1)</div>
+        <div class="formula">V<sub>T</sub> = kT/q ≈ 0.0862T mV<small>≈ 25 mV at room temp</small></div>
+        <div class="formula">V₂ − V₁ = 2.3 V<sub>T</sub> log(I₂/I₁)<small>60 mV per decade</small></div>
+        <ul>
+          <li>V<sub>D</sub> falls 2 mV/°C. I<sub>S</sub> doubles every 5 °C, reverse current every 10 °C.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Zener</h3>
+        <div class="formula">V<sub>Z</sub> = V<sub>Z0</sub> + r<sub>z</sub>I<sub>Z</sub>, &nbsp; ΔV = r<sub>z</sub>ΔI</div>
+        <ul><li>Valid for I<sub>Z</sub> &gt; I<sub>ZK</sub>. I<sub>max</sub> = P/V<sub>Z</sub>: 0.5 W, 6.8 V gives about 70 mA.</li></ul>
+        <h3>Half-wave rectifier</h3>
+        <div class="table-wrap"><table style="min-width:0">
+          <tr><td>V<sub>DC</sub></td><td class="eq">V<sub>m</sub>/π = 0.318V<sub>m</sub></td></tr>
+          <tr><td>V<sub>rms</sub></td><td class="eq">V<sub>m</sub>/2</td></tr>
+          <tr><td>Ripple factor</td><td class="eq">1.21</td></tr>
+          <tr><td>Efficiency</td><td class="eq">40.6%</td></tr>
+          <tr><td>Form factor</td><td class="eq">1.57</td></tr>
+          <tr><td>PIV</td><td class="eq">V<sub>m</sub></td></tr>
+        </table></div>
+      </div>
+    </div>
+  </div>
+  </div>
+</section>
+
+<!-- SOLVED -->
+<section class="block" id="solved">
+  <div class="sec-head">
+    <div><h2>Solved numericals</h2><p>Try each one first, then reveal the working step by step.</p></div>
+    <div class="filters" id="filters">
+      <button class="chip on" data-f="all">All</button>
+      <button class="chip" data-f="BJT">BJT</button>
+      <button class="chip" data-f="MOSFET">MOSFET</button>
+      <button class="chip" data-f="Feedback">Feedback</button>
+      <button class="chip" data-f="Diode">Diode</button>
+    </div>
+  </div>
+  <div class="problems" id="problems"></div>
+</section>
+
+<!-- THEORY -->
+<section class="block" id="theory">
+  <div class="sec-head">
+    <div><h2>Theory questions</h2><p>Tick each once you can explain it with a diagram.</p></div>
+  </div>
+  <ol class="theory sheet" id="theoryList"></ol>
+</section>
+
+<!-- ONE MARK -->
+<section class="block" id="onemark">
+  <div class="sec-head">
+    <div><h2>One-mark flashcards</h2><p>Tap a card to flip it.</p></div>
+    <div class="card-bar">
+      <button class="btn small ghost" id="shuffleBtn">Shuffle</button>
+      <button class="btn small ghost" id="flipAllBtn">Flip all</button>
+      <span class="count" id="flipCount">0 flipped</span>
+    </div>
+  </div>
+  <div class="cards" id="cards"></div>
+</section>
+
+<!-- PAPERS -->
+<section class="block" id="papers">
+  <div class="sec-head">
+    <div><h2>Mock papers</h2><p>25 marks, one hour. Start the timer, write on paper, then check the key.</p></div>
+    <div class="tabs" role="tablist" aria-label="Paper set" style="margin:0">
+      <button class="tab" role="tab" aria-selected="true" data-set="1">Set 1</button>
+      <button class="tab" role="tab" aria-selected="false" data-set="2">Set 2</button>
+    </div>
+  </div>
+  <div class="sheet">
+    <div class="paper-bar">
+      <div class="timer">
+        <span class="clock" id="clock">60:00</span>
+        <button class="btn small" id="timerBtn">Start timer</button>
+        <button class="btn small ghost" id="resetBtn">Reset</button>
+      </div>
+      <button class="btn small ghost" id="keyBtn" aria-expanded="false">Show answer key</button>
+    </div>
+    <div class="paper" id="paper"></div>
+  </div>
+</section>
+
+<!-- TIPS -->
+<section class="block" id="tips">
+  <div class="sec-head"><div><h2>Last-night tips</h2></div></div>
+  <div class="tips">
+    <div class="tip sheet"><strong>Assume, solve, verify</strong><p>BJT: assume active, then check V<sub>CB</sub> ≥ −0.4 V. MOSFET: assume saturation, then check V<sub>DS</sub> ≥ v<sub>OV</sub>.</p></div>
+    <div class="tip sheet"><strong>Draw the graphs</strong><p>Sketch i<sub>D</sub>–v<sub>DS</sub>, i<sub>C</sub>–v<sub>CE</sub> and the feedback block diagram in theory answers. They are easy marks.</p></div>
+    <div class="tip sheet"><strong>Units every line</strong><p>Write mA, kΩ, V at each step. Use V<sub>T</sub> = 25 mV unless the question gives a temperature.</p></div>
+  </div>
+</section>
+</main>
+
+<footer>Built from your EDC 302 slides (Diode, Rectifier, BJT, MOSFET). Feedback follows Sedra &amp; Smith, Ch. 11. Best of luck tomorrow.</footer>
+
+<script>
+/* ---------- storage ---------- */
+const store = {
+  get(k, d){ try{ const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; }catch(e){ return d; } },
+  set(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+};
+let done = new Set(store.get('edc-done', []));
+const saveDone = () => { store.set('edc-done', [...done]); updateProgress(); };
+
+/* ---------- theme ---------- */
+const root = document.documentElement;
+const savedTheme = store.get('edc-theme', null);
+if (savedTheme) root.setAttribute('data-theme', savedTheme);
+document.getElementById('themeBtn').onclick = () => {
+  const isDark = root.getAttribute('data-theme') === 'dark' ||
+    (!root.getAttribute('data-theme') && matchMedia('(prefers-color-scheme: dark)').matches);
+  const t = isDark ? 'light' : 'dark';
+  root.setAttribute('data-theme', t); store.set('edc-theme', t);
+};
+
+/* ---------- hero plot ---------- */
+const kn = 2; // mA/V^2
+const L = 48, T = 16, W = 360, H = 236; // plot box
+const X = v => L + v / 2 * W;
+const Y = i => T + H - i / 1 * H;
+const iD = (vov, v) => vov <= 0 ? 0 : (v < vov ? kn * (vov * v - v * v / 2) : kn * vov * vov / 2);
+function curvePath(vov){
+  let d = '';
+  for (let k = 0; k <= 100; k++){ const v = 2 * k / 100; d += (k ? 'L' : 'M') + X(v).toFixed(1) + ' ' + Y(iD(vov, v)).toFixed(1); }
+  return d;
+}
+(function initPlot(){
+  const bg = document.getElementById('bgCurves');
+  [0.25, 0.75, 1.0].forEach((ov, n) => {
+    const p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    p.setAttribute('class', 'curve-bg draw d' + (n + 1)); p.setAttribute('d', curvePath(ov)); bg.appendChild(p);
+  });
+  // boundary i = ½ kn v^2 up to 1 mA (v = 1)
+  let b = '', z = '';
+  for (let k = 0; k <= 50; k++){ const v = k / 50; b += (k ? 'L' : 'M') + X(v).toFixed(1) + ' ' + Y(kn * v * v / 2).toFixed(1); }
+  document.getElementById('boundary').setAttribute('d', b);
+  z = b + 'L' + X(2) + ' ' + Y(1) + 'L' + X(2) + ' ' + Y(0) + 'Z';
+  document.getElementById('satZone').setAttribute('d', z);
+  const ticks = document.getElementById('ticks'); let t = '';
+  [0, 0.5, 1, 1.5, 2].forEach(v => t += `<text class="tick" x="${X(v)}" y="270" text-anchor="middle">${v}</text>`);
+  [0, 0.25, 0.5, 0.75, 1].forEach(i => t += `<text class="tick" x="42" y="${Y(i) + 4}" text-anchor="end">${i}</text>`);
+  t += `<text class="tick" x="408" y="286" text-anchor="end">v<tspan baseline-shift="sub" font-size="8">DS</tspan> (V)</text>`;
+  t += `<text class="tick" x="54" y="26">i<tspan baseline-shift="sub" font-size="8">D</tspan> (mA)</text>`;
+  t += `<text class="tick" x="${X(1.45)}" y="${Y(0.08)}" fill="currentColor">saturation</text>`;
+  ticks.innerHTML = t;
+})();
+const ov = document.getElementById('ov'), ds = document.getElementById('ds');
+function updatePlot(){
+  const o = +ov.value, v = +ds.value, i = iD(o, v);
+  document.getElementById('mainCurve').setAttribute('d', curvePath(o));
+  const dot = document.getElementById('dot'); dot.setAttribute('cx', X(v)); dot.setAttribute('cy', Y(i));
+  document.getElementById('ovOut').textContent = o.toFixed(2);
+  document.getElementById('dsOut').textContent = v.toFixed(2);
+  const r = document.getElementById('region');
+  if (o <= 0){ r.textContent = 'Cutoff'; r.className = 'region cut'; }
+  else if (v < o){ r.textContent = 'Triode'; r.className = 'region triode'; }
+  else { r.textContent = 'Saturation'; r.className = 'region'; }
+  document.getElementById('idOut').innerHTML = `i<sub>D</sub> = ${i.toFixed(3)} mA`;
+}
+ov.oninput = ds.oninput = updatePlot; updatePlot();
+
+/* ---------- notes tabs ---------- */
+const noteTabs = document.querySelectorAll('#notes .tab');
+function openTab(id){
+  noteTabs.forEach(t => t.setAttribute('aria-selected', t.dataset.tab === id));
+  document.querySelectorAll('#notes .panel').forEach(p => {
+    const on = p.id === id; p.hidden = !on;
+    if (on){ p.classList.remove('enter'); void p.offsetWidth; p.classList.add('enter'); }
+  });
+}
+noteTabs.forEach(t => t.onclick = () => openTab(t.dataset.tab));
+openTab('n-bjt');
+
+/* ---------- problems ---------- */
+const problems = [
+  {id:'p1',t:'BJT',q:'An npn BJT has β = 100 and I<sub>C</sub> = 1 mA. Find I<sub>B</sub>, I<sub>E</sub> and α.',
+   s:['I<sub>B</sub> = I<sub>C</sub>/β = 1 mA/100 = 10 μA','I<sub>E</sub> = I<sub>C</sub> + I<sub>B</sub> = 1.01 mA','α = β/(β+1) = 100/101','I<sub>B</sub> = 10 μA, I<sub>E</sub> = 1.01 mA, α = 0.990']},
+  {id:'p2',t:'BJT',q:'I<sub>S</sub> = 10⁻¹⁵ A. Find V<sub>BE</sub> for I<sub>C</sub> = 1 mA (V<sub>T</sub> = 25 mV).',
+   s:['V<sub>BE</sub> = V<sub>T</sub> ln(I<sub>C</sub>/I<sub>S</sub>)','= 0.025 × ln(10⁻³/10⁻¹⁵) = 0.025 × ln(10¹²)','= 0.025 × 27.63','V<sub>BE</sub> = 0.691 V']},
+  {id:'p3',t:'BJT',q:'An npn BJT has V<sub>B</sub> = 4 V, R<sub>E</sub> = 3.3 kΩ, R<sub>C</sub> = 4.7 kΩ, V<sub>CC</sub> = 10 V, β = 100. Find currents and voltages and check the mode.',
+   s:['V<sub>E</sub> = 4 − 0.7 = 3.3 V, so I<sub>E</sub> = 3.3/3.3k = 1 mA','I<sub>C</sub> = αI<sub>E</sub> = 0.99 mA, I<sub>B</sub> = 9.9 μA','V<sub>C</sub> = 10 − 0.99 × 4.7 = 5.35 V','V<sub>CB</sub> = 5.35 − 4 = 1.35 V &gt; 0, CBJ reverse biased','Active mode ✓, V<sub>C</sub> = 5.35 V']},
+  {id:'p4',t:'BJT',q:'V<sub>BB</sub> = 5 V, R<sub>B</sub> = 10 kΩ, R<sub>C</sub> = 1 kΩ, V<sub>CC</sub> = 10 V, β = 100. Find the mode and β<sub>forced</sub>.',
+   s:['I<sub>B</sub> = (5 − 0.7)/10k = 0.43 mA','If active, I<sub>C</sub> = βI<sub>B</sub> = 43 mA','Maximum possible I<sub>C(sat)</sub> = (10 − 0.2)/1k = 9.8 mA','43 mA &gt; 9.8 mA, so the transistor is saturated','β<sub>forced</sub> = 9.8/0.43 = 22.8']},
+  {id:'p5',t:'BJT',q:'Early voltage V<sub>A</sub> = 100 V and I<sub>C</sub> = 1 mA. Find r<sub>o</sub>.',
+   s:['r<sub>o</sub> = V<sub>A</sub>/I<sub>C</sub> = 100/1 mA','r<sub>o</sub> = 100 kΩ']},
+  {id:'p6',t:'MOSFET',q:'k′<sub>n</sub> = 200 μA/V², W/L = 10, V<sub>t</sub> = 0.5 V, V<sub>GS</sub> = 1 V. Find I<sub>D</sub> at V<sub>DS</sub> = 2 V.',
+   s:['k<sub>n</sub> = 200μ × 10 = 2 mA/V², v<sub>OV</sub> = 1 − 0.5 = 0.5 V','V<sub>DS</sub> = 2 V ≥ v<sub>OV</sub>, so saturation','I<sub>D</sub> = ½ × 2m × 0.5²','I<sub>D</sub> = 250 μA']},
+  {id:'p7',t:'MOSFET',q:'Same device as above. Find I<sub>D</sub> at V<sub>DS</sub> = 0.2 V.',
+   s:['V<sub>DS</sub> = 0.2 V &lt; v<sub>OV</sub> = 0.5 V, so triode','I<sub>D</sub> = k<sub>n</sub>[v<sub>OV</sub>V<sub>DS</sub> − ½V<sub>DS</sub>²]','= 2m × [0.1 − 0.02] = 2m × 0.08','I<sub>D</sub> = 160 μA']},
+  {id:'p8',t:'MOSFET',q:'Same device. Find r<sub>DS</sub> for very small V<sub>DS</sub>.',
+   s:['r<sub>DS</sub> = 1/(k<sub>n</sub>v<sub>OV</sub>) = 1/(2m × 0.5)','r<sub>DS</sub> = 1 kΩ']},
+  {id:'p9',t:'MOSFET',q:'t<sub>ox</sub> = 4 nm, μ<sub>n</sub> = 450 cm²/V·s. Find C<sub>ox</sub> and k′<sub>n</sub>.',
+   s:['C<sub>ox</sub> = 3.45×10⁻¹¹ / 4×10⁻⁹ = 8.63×10⁻³ F/m² (8.6 fF/μm²)','k′<sub>n</sub> = 450×10⁻⁴ × 8.63×10⁻³','k′<sub>n</sub> ≈ 388 μA/V²']},
+  {id:'p10',t:'MOSFET',q:'V<sub>DD</sub> = 5 V, R<sub>D</sub> = 1 kΩ, V<sub>G</sub> = 3 V, source grounded, V<sub>t</sub> = 1 V, k<sub>n</sub> = 1 mA/V². Find I<sub>D</sub> and V<sub>D</sub>.',
+   s:['Assume saturation: v<sub>OV</sub> = 3 − 1 = 2 V','I<sub>D</sub> = ½ × 1m × 2² = 2 mA','V<sub>D</sub> = 5 − 2 × 1 = 3 V','Check: V<sub>DS</sub> = 3 V ≥ 2 V ✓','Saturation, I<sub>D</sub> = 2 mA, V<sub>D</sub> = 3 V']},
+  {id:'p11',t:'Feedback',q:'A = 10⁴. Find β for a closed-loop gain A<sub>f</sub> = 100.',
+   s:['1 + Aβ = A/A<sub>f</sub> = 10⁴/100 = 100','Aβ = 99','β = 99/10⁴ = 0.0099']},
+  {id:'p12',t:'Feedback',q:'In the previous amplifier, A drops by 20%. Find the percentage change in A<sub>f</sub>.',
+   s:['ΔA<sub>f</sub>/A<sub>f</sub> ≈ (ΔA/A)/(1 + Aβ)','= 20%/100','ΔA<sub>f</sub>/A<sub>f</sub> ≈ 0.2%']},
+  {id:'p13',t:'Feedback',q:'A = 1000, f<sub>H</sub> = 10 kHz, β = 0.1. Find A<sub>f</sub> and f<sub>Hf</sub>.',
+   s:['1 + Aβ = 1 + 100 = 101','A<sub>f</sub> = 1000/101 = 9.9','f<sub>Hf</sub> = 10 kHz × 101 = 1.01 MHz','Check: GBW = 10⁷ both ways, conserved','A<sub>f</sub> = 9.9, f<sub>Hf</sub> = 1.01 MHz']},
+  {id:'p14',t:'Feedback',q:'Series-shunt amplifier: A = 1000 V/V, R<sub>i</sub> = 10 kΩ, R<sub>o</sub> = 1 kΩ, β = 0.01. Find A<sub>f</sub>, R<sub>if</sub>, R<sub>of</sub>.',
+   s:['1 + Aβ = 1 + 10 = 11','A<sub>f</sub> = 1000/11 = 90.9 V/V','Series mixing: R<sub>if</sub> = 10k × 11 = 110 kΩ','Shunt sampling: R<sub>of</sub> = 1k/11 = 90.9 Ω']},
+  {id:'p15',t:'Diode',q:'Half-wave rectifier with V<sub>m</sub> = 20 V and R<sub>L</sub> = 1 kΩ. Find V<sub>DC</sub>, I<sub>DC</sub>, V<sub>rms</sub> and PIV.',
+   s:['V<sub>DC</sub> = V<sub>m</sub>/π = 20/π = 6.37 V','I<sub>DC</sub> = 6.37 V/1k = 6.37 mA','V<sub>rms</sub> = V<sub>m</sub>/2 = 10 V','PIV = V<sub>m</sub> = 20 V']},
+  {id:'p16',t:'Diode',q:'A diode conducts 1 mA at 0.7 V. Find its voltage at 10 mA.',
+   s:['A decade change in current adds 2.3V<sub>T</sub> ≈ 60 mV','V = 0.7 + 0.06','V ≈ 0.76 V']}
+];
+const probBox = document.getElementById('problems');
+probBox.innerHTML = problems.map((p, n) => `
+  <article class="prob sheet ${done.has(p.id) ? 'done' : ''}" data-t="${p.t}" id="${p.id}">
+    <div class="prob-top"><span class="tag">${p.t}</span><div class="prob-q"><b>Q${n + 1}.</b> ${p.q}</div></div>
+    <ol class="steps" hidden>${p.s.map((x, i) => `<li class="${i === p.s.length - 1 ? 'final' : ''}">${x}</li>`).join('')}</ol>
+    <div class="prob-actions">
+      <button class="btn small ghost reveal" aria-expanded="false">Show solution</button>
+      <label class="check"><input type="checkbox" data-id="${p.id}" ${done.has(p.id) ? 'checked' : ''}> Solved it</label>
+    </div>
+  </article>`).join('');
+probBox.addEventListener('click', e => {
+  const b = e.target.closest('.reveal'); if (!b) return;
+  const art = b.closest('.prob'), steps = art.querySelector('.steps'), items = steps.querySelectorAll('li');
+  const open = b.getAttribute('aria-expanded') === 'true';
+  if (open){ steps.hidden = true; items.forEach(li => li.classList.remove('show')); b.textContent = 'Show solution'; b.setAttribute('aria-expanded', 'false'); return; }
+  steps.hidden = false; b.textContent = 'Hide solution'; b.setAttribute('aria-expanded', 'true');
+  items.forEach((li, i) => setTimeout(() => li.classList.add('show'), 90 + i * 220));
+});
+probBox.addEventListener('change', e => {
+  const c = e.target; if (!c.dataset.id) return;
+  c.checked ? done.add(c.dataset.id) : done.delete(c.dataset.id);
+  c.closest('.prob').classList.toggle('done', c.checked); saveDone();
+});
+document.getElementById('filters').addEventListener('click', e => {
+  const c = e.target.closest('.chip'); if (!c) return;
+  document.querySelectorAll('#filters .chip').forEach(x => x.classList.toggle('on', x === c));
+  document.querySelectorAll('.prob').forEach(p => p.hidden = !(c.dataset.f === 'all' || p.dataset.t === c.dataset.f));
+});
+
+/* ---------- theory ---------- */
+const theory = [
+  ['BJT','Explain the operation of an npn transistor in active mode, with the current components i<sub>B1</sub> and i<sub>B2</sub>.'],
+  ['BJT','Derive α = β/(β+1) and show that β = 100 gives α ≈ 0.99.'],
+  ['BJT','Explain saturation mode. Why is i<sub>C</sub> &lt; βi<sub>B</sub>? Define β<sub>forced</sub> and V<sub>CE(sat)</sub>.'],
+  ['BJT','What is the Early effect? Draw i<sub>C</sub>–v<sub>CE</sub> characteristics and define V<sub>A</sub> and r<sub>o</sub>.'],
+  ['BJT','Draw and explain the large-signal equivalent circuit models of a BJT in active mode.'],
+  ['MOSFET','Explain how a channel is induced in an enhancement NMOS. Define V<sub>t</sub> and v<sub>OV</sub>.'],
+  ['MOSFET','Derive i<sub>D</sub> for the triode region. Why does the channel taper as v<sub>DS</sub> increases?'],
+  ['MOSFET','Explain channel pinch-off and current saturation. Does pinch-off stop the current?'],
+  ['MOSFET','Compare NMOS and PMOS. Why did NMOS replace PMOS? What is CMOS?'],
+  ['MOSFET','Draw i<sub>D</sub>–v<sub>DS</sub> characteristics and mark the cutoff, triode and saturation regions.'],
+  ['Feedback','Draw the general feedback structure and derive A<sub>f</sub> = A/(1+Aβ).'],
+  ['Feedback','Explain gain desensitivity, bandwidth extension, noise reduction and distortion reduction.'],
+  ['Feedback','Explain the four feedback topologies and their effect on R<sub>in</sub> and R<sub>out</sub>.']
+];
+const tl = document.getElementById('theoryList');
+tl.innerHTML = theory.map((t, i) => { const id = 't' + i; return `
+  <li class="${done.has(id) ? 'done' : ''}"><span><small class="tname">${t[0]}</small>${t[1]}</span>
+  <input type="checkbox" aria-label="Mark revised" data-id="${id}" ${done.has(id) ? 'checked' : ''}></li>`; }).join('');
+tl.addEventListener('change', e => {
+  const c = e.target; c.checked ? done.add(c.dataset.id) : done.delete(c.dataset.id);
+  c.closest('li').classList.toggle('done', c.checked); saveDone();
+});
+
+/* ---------- flashcards ---------- */
+let cards = [
+  ['Typical V<sub>CE(sat)</sub> of a BJT?','0.2 V'],
+  ['Junction biasing in active mode?','EBJ forward, CBJ reverse'],
+  ['Most heavily doped region of a BJT?','Emitter'],
+  ['If α = 0.98, β = ?','49'],
+  ['Early effect is also called?','Base-width modulation'],
+  ['Change of V<sub>BE</sub> with temperature?','−2 mV/°C'],
+  ['Gate current of a MOSFET?','Zero'],
+  ['v<sub>DS(sat)</sub> of a MOSFET?','v<sub>OV</sub> = v<sub>GS</sub> − V<sub>t</sub>'],
+  ['Unit of k′<sub>n</sub>?','A/V²'],
+  ['Triode/saturation boundary?','i<sub>D</sub> = ½k<sub>n</sub>v<sub>DS</sub>²'],
+  ['PMOS is built on which substrate?','n-type'],
+  ['μ<sub>p</sub> relative to μ<sub>n</sub>?','0.25–0.5 μ<sub>n</sub>'],
+  ['What is the loop gain?','Aβ'],
+  ['If Aβ ≫ 1, A<sub>f</sub> = ?','1/β'],
+  ['Shunt-shunt feedback forms which amplifier?','Transresistance'],
+  ['Series mixing does what to R<sub>in</sub>?','Increases it by (1+Aβ)'],
+  ['Effect of negative feedback on bandwidth?','Increases by (1+Aβ)'],
+  ['Efficiency of a half-wave rectifier?','40.6%'],
+  ['V<sub>T</sub> at room temperature?','≈ 25 mV'],
+  ['How does I<sub>CBO</sub> vary with temperature?','Doubles every 10 °C']
+];
+const cardBox = document.getElementById('cards');
+function renderCards(){
+  cardBox.innerHTML = cards.map((c, i) => `
+    <button class="card" aria-label="Flashcard ${i + 1}, tap to flip">
+      <div class="card-inner">
+        <div class="face front"><span class="n">Card ${i + 1}</span><span class="q">${c[0]}</span><span class="hint">Tap to reveal</span></div>
+        <div class="face back"><span class="a">${c[1]}</span></div>
+      </div></button>`).join('');
+  countFlips();
+}
+function countFlips(){ document.getElementById('flipCount').textContent = cardBox.querySelectorAll('.card.flip').length + ' of ' + cards.length + ' flipped'; }
+cardBox.addEventListener('click', e => { const c = e.target.closest('.card'); if (c){ c.classList.toggle('flip'); countFlips(); } });
+document.getElementById('shuffleBtn').onclick = () => { cards = cards.map(c => [Math.random(), c]).sort((a, b) => a[0] - b[0]).map(x => x[1]); renderCards(); };
+document.getElementById('flipAllBtn').onclick = function(){
+  const all = cardBox.querySelectorAll('.card'); const anyFront = [...all].some(c => !c.classList.contains('flip'));
+  all.forEach((c, i) => setTimeout(() => c.classList.toggle('flip', anyFront), i * 35));
+  this.textContent = anyFront ? 'Unflip all' : 'Flip all'; setTimeout(countFlips, all.length * 35 + 20);
+};
+renderCards();
+
+/* ---------- papers ---------- */
+const papers = {
+  1: { q: `
+    <div class="pq"><span class="qn">Q1</span><div>Answer all.
+      <ol type="a"><li>State the biasing of both junctions in saturation mode of a BJT.</li><li>If β = 150, find α.</li><li>Define overdrive voltage.</li><li>Which feedback topology is ideal for a voltage amplifier?</li><li>Write the expression for closed-loop gain.</li></ol></div><span class="mk">5 × 1 = 5</span></div>
+    <div class="pq"><span class="qn">Q2</span><div>Explain channel pinch-off in an NMOS with neat sketches of the channel shape and the i<sub>D</sub>–v<sub>DS</sub> curve.<br><span class="or">OR</span><br>Explain any four properties of negative feedback.</div><span class="mk">5</span></div>
+    <div class="pq"><span class="qn">Q3</span><div>An npn transistor has β = 100, V<sub>CC</sub> = 15 V, R<sub>C</sub> = 5 kΩ, R<sub>E</sub> = 4.3 kΩ, and its base is held at 5 V. Find I<sub>E</sub>, I<sub>C</sub>, I<sub>B</sub>, V<sub>C</sub> and V<sub>CE</sub>. Verify the mode.</div><span class="mk">5</span></div>
+    <div class="pq"><span class="qn">Q4</span><div>An NMOS has V<sub>t</sub> = 0.6 V, k′<sub>n</sub> = 100 μA/V², W/L = 20, V<sub>GS</sub> = 1.1 V. Find (a) I<sub>D</sub> at V<sub>DS</sub> = 1 V, (b) I<sub>D</sub> at V<sub>DS</sub> = 0.3 V, (c) r<sub>DS</sub> for small V<sub>DS</sub>.</div><span class="mk">5</span></div>
+    <div class="pq"><span class="qn">Q5</span><div>An amplifier has A = 2000, β = 0.05 and open-loop f<sub>H</sub> = 5 kHz. Find (a) A<sub>f</sub>, (b) the % change in A<sub>f</sub> if A drops by 10%, (c) the closed-loop f<sub>H</sub>.</div><span class="mk">5</span></div>`,
+    k: `<h4>Answer key, Set 1</h4>
+    <p><b>Q1</b> (a) Both junctions forward biased. (b) α = 150/151 = 0.993. (c) v<sub>OV</sub> = v<sub>GS</sub> − V<sub>t</sub>. (d) Series-shunt. (e) A<sub>f</sub> = A/(1+Aβ).</p>
+    <p><b>Q3</b> V<sub>E</sub> = 4.3 V, I<sub>E</sub> = 1 mA, I<sub>C</sub> = 0.99 mA, I<sub>B</sub> = 9.9 μA, V<sub>C</sub> = 10.05 V, V<sub>CE</sub> = 5.75 V. V<sub>CB</sub> = 5.05 V &gt; 0, so active.</p>
+    <p><b>Q4</b> v<sub>OV</sub> = 0.5 V, k<sub>n</sub> = 2 mA/V². (a) Saturation, 0.25 mA. (b) Triode, 2m × (0.15 − 0.045) = 0.21 mA. (c) 1 kΩ.</p>
+    <p><b>Q5</b> 1 + Aβ = 101. (a) A<sub>f</sub> = 19.8. (b) ≈ 10%/101 = 0.099%. (c) f<sub>Hf</sub> = 505 kHz.</p>` },
+  2: { q: `
+    <div class="pq"><span class="qn">Q1</span><div>Answer all.
+      <ol type="a"><li>Why is the base kept thin and lightly doped?</li><li>Write the i<sub>D</sub> equation for saturation.</li><li>What is the Early voltage?</li><li>What does shunt-series feedback do to R<sub>out</sub>?</li><li>What is the desensitivity factor?</li></ol></div><span class="mk">5 × 1 = 5</span></div>
+    <div class="pq"><span class="qn">Q2</span><div>Explain npn active-mode operation and derive the relations between i<sub>C</sub>, i<sub>B</sub>, i<sub>E</sub>, α and β.<br><span class="or">OR</span><br>Compare the four feedback topologies in a table.</div><span class="mk">5</span></div>
+    <div class="pq"><span class="qn">Q3</span><div>(a) A transistor has I<sub>S</sub> = 10⁻¹⁴ A. Find V<sub>BE</sub> at I<sub>C</sub> = 2 mA. <b>(2)</b><br>(b) V<sub>BB</sub> = 3 V, R<sub>B</sub> = 20 kΩ, V<sub>CC</sub> = 5 V, R<sub>C</sub> = 1 kΩ, β = 50. Determine the mode and β<sub>forced</sub>. <b>(3)</b></div><span class="mk">5</span></div>
+    <div class="pq"><span class="qn">Q4</span><div>Design an NMOS circuit with V<sub>DD</sub> = 3 V, V<sub>t</sub> = 0.5 V, k′<sub>n</sub> = 200 μA/V², W/L = 20 (source grounded) so that I<sub>D</sub> = 0.2 mA and V<sub>D</sub> = 1 V. Find V<sub>GS</sub> and R<sub>D</sub>. What is the largest R<sub>D</sub> that keeps it in saturation?</div><span class="mk">5</span></div>
+    <div class="pq"><span class="qn">Q5</span><div>A series-shunt feedback amplifier has A = 500 V/V, R<sub>i</sub> = 5 kΩ, R<sub>o</sub> = 2 kΩ, β = 0.02. Find A<sub>f</sub>, R<sub>if</sub>, R<sub>of</sub> and the desensitivity factor.</div><span class="mk">5</span></div>`,
+    k: `<h4>Answer key, Set 2</h4>
+    <p><b>Q1</b> (a) To reduce recombination so most carriers reach the collector. (b) i<sub>D</sub> = ½k′<sub>n</sub>(W/L)(v<sub>GS</sub> − V<sub>t</sub>)². (c) Extrapolated i<sub>C</sub>–v<sub>CE</sub> lines meet the v<sub>CE</sub> axis at −V<sub>A</sub>. (d) Increases it by (1+Aβ). (e) 1 + Aβ.</p>
+    <p><b>Q3</b> (a) V<sub>BE</sub> = 0.025 ln(2×10¹¹) = 0.651 V. (b) I<sub>B</sub> = 0.115 mA, βI<sub>B</sub> = 5.75 mA, but I<sub>C(sat)</sub> = 4.8 mA, so saturated. β<sub>forced</sub> = 41.7.</p>
+    <p><b>Q4</b> k<sub>n</sub> = 4 mA/V², v<sub>OV</sub> = √(0.4/4) = 0.316 V, V<sub>GS</sub> = 0.816 V, R<sub>D</sub> = 2 V/0.2 mA = 10 kΩ. Maximum R<sub>D</sub> = (3 − 0.316)/0.2m = 13.4 kΩ.</p>
+    <p><b>Q5</b> 1 + Aβ = 11. A<sub>f</sub> = 45.45 V/V, R<sub>if</sub> = 55 kΩ, R<sub>of</sub> = 181.8 Ω, desensitivity factor = 11.</p>` }
+};
+let curSet = 1;
+const paperEl = document.getElementById('paper'), keyBtn = document.getElementById('keyBtn');
+function renderPaper(){
+  paperEl.innerHTML = `<div class="paper-meta"><span>EDC 302 Midsem, Model Set ${curSet}</span><span>Max marks 25 &nbsp;|&nbsp; Time 1 hour</span></div>
+    ${papers[curSet].q}<div class="key" id="key"><div class="key-inner">${papers[curSet].k}</div></div>`;
+  keyBtn.textContent = 'Show answer key'; keyBtn.setAttribute('aria-expanded', 'false');
+  paperEl.classList.remove('enter'); void paperEl.offsetWidth; paperEl.classList.add('panel','enter');
+}
+document.querySelectorAll('#papers .tab').forEach(t => t.onclick = () => {
+  curSet = +t.dataset.set;
+  document.querySelectorAll('#papers .tab').forEach(x => x.setAttribute('aria-selected', x === t));
+  renderPaper(); resetTimer();
+});
+keyBtn.onclick = () => {
+  const k = document.getElementById('key'), open = k.classList.toggle('open');
+  keyBtn.textContent = open ? 'Hide answer key' : 'Show answer key'; keyBtn.setAttribute('aria-expanded', open);
+};
+renderPaper();
+
+/* timer */
+let secs = 3600, tick = null;
+const clock = document.getElementById('clock'), timerBtn = document.getElementById('timerBtn');
+const fmt = s => String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
+function resetTimer(){ clearInterval(tick); tick = null; secs = 3600; clock.textContent = fmt(secs); clock.classList.remove('low'); timerBtn.textContent = 'Start timer'; }
+timerBtn.onclick = () => {
+  if (tick){ clearInterval(tick); tick = null; timerBtn.textContent = 'Resume'; return; }
+  timerBtn.textContent = 'Pause';
+  tick = setInterval(() => {
+    secs = Math.max(0, secs - 1); clock.textContent = fmt(secs); clock.classList.toggle('low', secs <= 300);
+    if (!secs){ clearInterval(tick); tick = null; timerBtn.textContent = "Time's up"; }
+  }, 1000);
+};
+document.getElementById('resetBtn').onclick = resetTimer;
+
+/* ---------- progress ---------- */
+const total = problems.length + theory.length;
+function updateProgress(){
+  const n = done.size, c = 100.5;
+  document.getElementById('ringFg').setAttribute('stroke-dashoffset', (c - c * n / total).toFixed(1));
+  document.getElementById('progText').textContent = n + ' of ' + total + ' done';
+}
+updateProgress();
+
+/* ---------- active nav ---------- */
+const links = [...document.querySelectorAll('#navLinks a')];
+const io = new IntersectionObserver(es => es.forEach(e => {
+  if (e.isIntersecting){ links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + e.target.id));
+    const a = links.find(l => l.classList.contains('active')); if (a){ const nl = document.getElementById('navLinks'); nl.scrollLeft = a.offsetLeft - nl.clientWidth / 2 + a.clientWidth / 2; } }
+}), {rootMargin:'-40% 0px -55% 0px'});
+document.querySelectorAll('section.block').forEach(s => io.observe(s));
+</script>
+</body>
+</html>
