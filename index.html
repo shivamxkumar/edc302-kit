@@ -244,6 +244,25 @@ footer{padding:48px 0 8px;color:var(--muted);font-size:.88rem;text-align:center}
 .quiz-actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 .quiz-count{margin-left:auto;font-size:.82rem;color:var(--muted)}
 
+/* ---------- advanced numericals ---------- */
+.adv-problems{display:grid;gap:18px}
+.adv-prob{padding:20px 22px 22px;border-left:4px solid var(--line)}
+.adv-prob[data-d="moderate"]{border-left-color:var(--trace)}
+.adv-prob[data-d="hard"]{border-left-color:var(--alert)}
+.adv-top{display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap}
+.diff{font-size:.72rem;font-weight:700;padding:3px 10px;border-radius:999px}
+.diff-moderate{background:var(--trace-soft);color:var(--trace)}
+.diff-hard{background:color-mix(in srgb,var(--alert) 18%,transparent);color:var(--alert)}
+.adv-q{margin:0 0 16px;line-height:1.55;max-width:66ch}
+.circuit{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:14px;margin-bottom:16px;overflow-x:auto}
+.circuit svg{display:block;margin:0 auto;max-width:100%;height:auto;min-width:240px}
+.circuit svg text{font-family:"Archivo",sans-serif}
+.cd-rail{fill:var(--ink);font-weight:700;font-size:11px}
+.cd-lbl{fill:var(--ink);font-weight:700;font-size:11px}
+.cd-val{fill:var(--muted);font-size:10px}
+.cd-term{fill:var(--muted);font-size:10px;font-style:italic}
+.cd-box{fill:var(--sheet);stroke:var(--ink);stroke-width:1.6}
+
 @media (max-width:860px){
   .hero-grid,.cols{grid-template-columns:1fr}
   .tips{grid-template-columns:1fr}
@@ -315,6 +334,7 @@ footer{padding:48px 0 8px;color:var(--muted);font-size:.88rem;text-align:center}
     <div class="nav-links" id="navLinks">
       <a href="#notes">Notes</a>
       <a href="#solved">Solved numericals</a>
+      <a href="#advnum">Circuit numericals</a>
       <a href="#theory">Theory</a>
       <a href="#onemark">One-markers</a>
       <a href="#papers">Mock papers</a>
@@ -327,6 +347,26 @@ footer{padding:48px 0 8px;color:var(--muted);font-size:.88rem;text-align:center}
     <button class="theme-btn" id="themeBtn" aria-label="Toggle dark mode">◐</button>
   </div>
 </nav>
+
+<svg width="0" height="0" style="position:absolute;overflow:hidden" aria-hidden="true" focusable="false">
+<defs>
+<g id="symRv" fill="none" stroke="currentColor" stroke-width="1.6">
+<line x1="10" y1="0" x2="10" y2="10"/><rect x="0" y="10" width="20" height="46"/><line x1="10" y1="56" x2="10" y2="66"/>
+</g>
+<g id="symGnd" fill="none" stroke="currentColor" stroke-width="1.6">
+<line x1="0" y1="0" x2="0" y2="10"/><line x1="-10" y1="10" x2="10" y2="10"/><line x1="-6" y1="15" x2="6" y2="15"/><line x1="-3" y1="20" x2="3" y2="20"/>
+</g>
+<g id="symNpn" fill="none" stroke="currentColor" stroke-width="1.6">
+<circle cx="26" cy="35" r="24"/>
+<path d="M0,35 L16,35 M16,22 L16,48 M16,24 L32,12 L32,-6 M16,46 L32,58 L32,76"/>
+<polygon points="22,49 31,53 24,59" fill="currentColor" stroke="none"/>
+</g>
+<g id="symNmos" fill="none" stroke="currentColor" stroke-width="1.6">
+<path d="M0,35 L22,35 M24,15 L24,55 M32,-6 L32,30 M32,40 L32,76"/>
+<polygon points="28,58 36,58 32,50" fill="currentColor" stroke="none"/>
+</g>
+</defs>
+</svg>
 
 <main class="wrap">
 
@@ -521,6 +561,280 @@ footer{padding:48px 0 8px;color:var(--muted);font-size:.88rem;text-align:center}
     </div>
   </div>
   <div class="problems" id="problems"></div>
+</section>
+
+<!-- ADVANCED / CIRCUIT NUMERICALS -->
+<section class="block" id="advnum">
+  <div class="sec-head">
+    <div><h2>Circuit numericals</h2><p>Moderate and hard problems on BJT, MOSFET and feedback biasing/design — each with its own circuit diagram and full step-by-step working.</p></div>
+    <div class="filters" id="advFilters">
+      <button class="chip on" data-f="all">All</button>
+      <button class="chip" data-f="BJT">BJT</button>
+      <button class="chip" data-f="MOSFET">MOSFET</button>
+      <button class="chip" data-f="Feedback">Feedback</button>
+    </div>
+  </div>
+  <div class="adv-problems" id="advProblems">
+
+    <article class="adv-prob sheet" data-t="BJT" data-d="moderate">
+      <div class="adv-top"><span class="tag">BJT</span><span class="diff diff-moderate">Moderate</span></div>
+      <p class="adv-q"><b>Q1.</b> In the four-resistor (voltage-divider) bias circuit shown, V<sub>CC</sub> = 15 V, R1 = 56 kΩ, R2 = 10 kΩ, R<sub>C</sub> = 2.2 kΩ, R<sub>E</sub> = 1 kΩ, β = 100 and V<sub>BE</sub> = 0.7 V. Find I<sub>B</sub>, I<sub>C</sub>, I<sub>E</sub> and V<sub>CE</sub>, and verify that the transistor is in the active region.</p>
+      <div class="circuit">
+        <svg viewBox="0 0 270 300" role="img" aria-label="Four-resistor voltage-divider bias circuit for an npn BJT" style="color:var(--ink)">
+          <line x1="40" y1="20" x2="220" y2="20" stroke="currentColor" stroke-width="1.6"/>
+          <text x="95" y="14" class="cd-rail">+V<tspan baseline-shift="sub" font-size="8">CC</tspan> = 15 V</text>
+          <circle cx="80" cy="20" r="2.3" fill="currentColor"/><circle cx="182" cy="20" r="2.3" fill="currentColor"/>
+          <line x1="80" y1="20" x2="80" y2="30" stroke="currentColor" stroke-width="1.6"/>
+          <use href="#symRv" transform="translate(70,30)"/>
+          <text x="95" y="58" class="cd-lbl">R1</text><text x="95" y="71" class="cd-val">56 kΩ</text>
+          <line x1="80" y1="96" x2="80" y2="137" stroke="currentColor" stroke-width="1.6"/>
+          <circle cx="80" cy="137" r="2.3" fill="currentColor"/>
+          <line x1="80" y1="137" x2="80" y2="147" stroke="currentColor" stroke-width="1.6"/>
+          <use href="#symRv" transform="translate(70,147)"/>
+          <text x="95" y="175" class="cd-lbl">R2</text><text x="95" y="188" class="cd-val">10 kΩ</text>
+          <line x1="80" y1="213" x2="80" y2="223" stroke="currentColor" stroke-width="1.6"/>
+          <use href="#symGnd" transform="translate(80,223)"/>
+          <line x1="80" y1="137" x2="150" y2="137" stroke="currentColor" stroke-width="1.6"/>
+          <text x="118" y="130" class="cd-term">B</text>
+          <use href="#symNpn" transform="translate(150,102)"/>
+          <text x="176" y="96" class="cd-lbl" text-anchor="middle">Q1</text>
+          <text x="192" y="90" class="cd-term">C</text><text x="192" y="182" class="cd-term">E</text>
+          <line x1="182" y1="20" x2="182" y2="30" stroke="currentColor" stroke-width="1.6"/>
+          <use href="#symRv" transform="translate(172,30)"/>
+          <text x="197" y="58" class="cd-lbl">RC</text><text x="197" y="71" class="cd-val">2.2 kΩ</text>
+          <line x1="182" y1="178" x2="182" y2="188" stroke="currentColor" stroke-width="1.6"/>
+          <use href="#symRv" transform="translate(172,188)"/>
+          <text x="197" y="216" class="cd-lbl">RE</text><text x="197" y="229" class="cd-val">1 kΩ</text>
+          <line x1="182" y1="254" x2="182" y2="264" stroke="currentColor" stroke-width="1.6"/>
+          <use href="#symGnd" transform="translate(182,264)"/>
+        </svg>
+      </div>
+      <button class="btn small ghost reveal" aria-expanded="false">Show detailed solution</button>
+      <ol class="steps" hidden>
+        <li>Find the Thevenin equivalent seen by the base: V<sub>TH</sub> = V<sub>CC</sub>R2/(R1+R2) = 15×10/66 = 2.27 V, and R<sub>TH</sub> = R1∥R2 = 56×10/66 = 8.48 kΩ.</li>
+        <li>Write the base–emitter loop: V<sub>TH</sub> = I<sub>B</sub>R<sub>TH</sub> + V<sub>BE</sub> + I<sub>E</sub>R<sub>E</sub>, with I<sub>E</sub> = (β+1)I<sub>B</sub>.</li>
+        <li>Solve for I<sub>B</sub>: I<sub>B</sub> = (V<sub>TH</sub>−V<sub>BE</sub>)/(R<sub>TH</sub>+(β+1)R<sub>E</sub>) = (2.27−0.7)/(8.48k+101×1k) = 1.57/109.48k ≈ 14.4 μA.</li>
+        <li>I<sub>C</sub> = βI<sub>B</sub> ≈ 1.44 mA; I<sub>E</sub> = (β+1)I<sub>B</sub> ≈ 1.45 mA.</li>
+        <li>V<sub>E</sub> = I<sub>E</sub>R<sub>E</sub> ≈ 1.45 V; V<sub>C</sub> = V<sub>CC</sub> − I<sub>C</sub>R<sub>C</sub> = 15 − 1.44m×2.2k ≈ 11.84 V.</li>
+        <li>V<sub>CE</sub> = V<sub>C</sub> − V<sub>E</sub> ≈ 10.39 V. V<sub>CB</sub> = V<sub>C</sub>−V<sub>B</sub> ≈ 9.7 V &gt; 0, so the CBJ stays reverse biased.</li>
+        <li class="final">I<sub>B</sub> ≈ 14.4 μA, I<sub>C</sub> ≈ 1.44 mA, V<sub>CE</sub> ≈ 10.39 V — active mode confirmed.</li>
+      </ol>
+    </article>
+
+    <article class="adv-prob sheet" data-t="BJT" data-d="hard">
+      <div class="adv-top"><span class="tag">BJT</span><span class="diff diff-hard">Hard</span></div>
+      <p class="adv-q"><b>Q2.</b> The npn stage below uses a dual supply: V<sub>CC</sub> = +10 V and V<sub>EE</sub> = −10 V, with R<sub>B</sub> = 10 kΩ from base to ground, R<sub>C</sub> = 3 kΩ, R<sub>E</sub> = 4.7 kΩ, β = 100 and V<sub>BE</sub> = 0.7 V. Find I<sub>C</sub> and V<sub>CE</sub>, being careful with the sign of V<sub>EE</sub> in the base–emitter loop.</p>
+      <div class="circuit">
+        <svg viewBox="0 0 270 305" role="img" aria-label="Dual-supply bias circuit for an npn BJT with a base resistor to ground and an emitter resistor to the negative supply" style="color:var(--ink)">
+          <line x1="40" y1="20" x2="220" y2="20" stroke="currentColor" stroke-width="1.6"/>
+          <text x="90" y="14" class="cd-rail">+V<tspan baseline-shift="sub" font-size="8">CC</tspan> = 10 V</text>
+          <circle cx="182" cy="20" r="2.3" fill="currentColor"/>
+          <line x1="182" y1="20" x2="182" y2="30" stroke="currentColor" stroke-width="1.6"/>
+          <use href="#symRv" transform="translate(172,30)"/>
+          <text x="197" y="58" class="cd-lbl">RC</text><text x="197" y="71" class="cd-val">3 kΩ</text>
+          <use href="#symNpn" transform="translate(150,102)"/>
+          <text x="176" y="96" class="cd-lbl" text-anchor="middle">Q1</text>
+          <text x="192" y="90" class="cd-term">C</text><text x="126" y="130" class="cd-term">B</text><text x="192" y="182" class="cd-term">E</text>
+          <line x1="150" y1="137" x2="150" y2="147" stroke="currentColor" stroke-width="1.6"/>
+          <use href="#symRv" transform="translate(140,147)"/>
+          <text x="165" y="175" class="cd-lbl">RB</text><text x="165" y="188" class="cd-val">10 kΩ</text>
+          <line x1="150" y1="213" x2="150" y2="223" stroke="currentColor" stroke-width="1.6"/>
+          <use href="#symGnd" transform="translate(150,223)"/>
+          <line x1="182" y1="178" x2="182" y2="188" stroke="currentColor" stroke-width="1.6"/>
+          <use href="#symRv" transform="translate(172,188)"/>
+          <text x="197" y="216" class="cd-lbl">RE</text><text x="197" y="229" class="cd-val">4.7 kΩ</text>
+          <line x1="182" y1="254" x2="182" y2="275" stroke="currentColor" stroke-width="1.6"/>
+          <circle cx="182" cy="275" r="2.3" fill="currentColor"/>
+          <line x1="40" y1="275" x2="220" y2="275" stroke="currentColor" stroke-width="1.6"/>
+          <text x="82" y="292" class="cd-rail">−V<tspan baseline-shift="sub" font-size="8">EE</tspan> = −10 V</text>
+        </svg>
+      </div>
+      <button class="btn small ghost reveal" aria-expanded="false">Show detailed solution</button>
+      <ol class="steps" hidden>
+        <li>Trace the loop from ground, through R<sub>B</sub> into the base, through V<sub>BE</sub>, then from the emitter through R<sub>E</sub> down to −V<sub>EE</sub>: I<sub>B</sub>R<sub>B</sub> + V<sub>BE</sub> + I<sub>E</sub>R<sub>E</sub> = V<sub>EE</sub>.</li>
+        <li>Use I<sub>B</sub> = I<sub>E</sub>/(β+1) and solve for I<sub>E</sub>: I<sub>E</sub> = (V<sub>EE</sub>−V<sub>BE</sub>)/(R<sub>E</sub>+R<sub>B</sub>/(β+1)) = (10−0.7)/(4.7k+10k/101) = 9.3/4.799k ≈ 1.938 mA.</li>
+        <li>I<sub>C</sub> = αI<sub>E</sub> = (β/(β+1))×1.938m ≈ 1.919 mA; I<sub>B</sub> = I<sub>E</sub>/(β+1) ≈ 19.2 μA.</li>
+        <li>V<sub>C</sub> = V<sub>CC</sub> − I<sub>C</sub>R<sub>C</sub> = 10 − 1.919m×3k ≈ 4.24 V.</li>
+        <li>Current flows from ground through R<sub>B</sub> into the base, so V<sub>B</sub> = −I<sub>B</sub>R<sub>B</sub> ≈ −0.19 V, and V<sub>E</sub> = V<sub>B</sub> − V<sub>BE</sub> ≈ −0.89 V.</li>
+        <li>V<sub>CE</sub> = V<sub>C</sub> − V<sub>E</sub> ≈ 5.14 V. V<sub>CB</sub> = V<sub>C</sub>−V<sub>B</sub> ≈ 4.44 V &gt; 0, so the CBJ stays reverse biased.</li>
+        <li class="final">I<sub>C</sub> ≈ 1.92 mA, V<sub>CE</sub> ≈ 5.14 V — active mode confirmed.</li>
+      </ol>
+    </article>
+
+    <article class="adv-prob sheet" data-t="MOSFET" data-d="moderate">
+      <div class="adv-top"><span class="tag">MOSFET</span><span class="diff diff-moderate">Moderate</span></div>
+      <p class="adv-q"><b>Q3.</b> The NMOS below has k′<sub>n</sub>(W/L) = k<sub>n</sub> = 1 mA/V² and V<sub>t</sub> = 1 V. With V<sub>DD</sub> = 12 V, R<sub>G1</sub> = 2 MΩ, R<sub>G2</sub> = 1 MΩ, R<sub>D</sub> = 3 kΩ and R<sub>S</sub> = 1 kΩ, find the quiescent I<sub>D</sub> and V<sub>DS</sub>, and confirm the region of operation. (The divider only fixes V<sub>G</sub> — you'll need the quadratic formula to get V<sub>GS</sub>.)</p>
+      <div class="circuit">
+        <svg viewBox="0 0 270 300" role="img" aria-label="Four-resistor gate voltage-divider bias circuit for an NMOS" style="color:var(--ink)">
+          <line x1="40" y1="20" x2="220" y2="20" stroke="currentColor" stroke-width="1.6"/>
+          <text x="92" y="14" class="cd-rail">+V<tspan baseline-shift="sub" font-size="8">DD</tspan> = 12 V</text>
+          <circle cx="80" cy="20" r="2.3" fill="currentColor"/><circle cx="182" cy="20" r="2.3" fill="currentColor"/>
+          <line x1="80" y1="20" x2="80" y2="30" stroke="currentColor" stroke-width="1.6"/>
+          <use href="#symRv" transform="translate(70,30)"/>
+          <text x="95" y="58" class="cd-lbl">RG1</text><text x="95" y="71" class="cd-val">2 MΩ</text>
+          <line x1="80" y1="96" x2="80" y2="137" stroke="currentColor" stroke-width="1.6"/>
+          <circle cx="80" cy="137" r="2.3" fill="currentColor"/>
+          <line x1="80" y1="137" x2="80" y2="147" stroke="currentColor" stroke-width="1.6"/>
+          <use href="#symRv" transform="translate(70,147)"/>
+          <text x="95" y="175" class="cd-lbl">RG2</text><text x="95" y="188" class="cd-val">1 MΩ</text>
+          <line x1="80" y1="213" x2="80" y2="223" stroke="currentColor" stroke-width="1.6"/>
+          <use href="#symGnd" transform="translate(80,223)"/>
+          <line x1="80" y1="137" x2="150" y2="137" stroke="currentColor" stroke-width="1.6"/>
+          <text x="116" y="130" class="cd-term">G</text>
+          <use href="#symNmos" transform="translate(150,102)"/>
+          <text x="200" y="141" class="cd-lbl">M1</text>
+          <text x="182" y="90" class="cd-term">D</text><text x="182" y="182" class="cd-term">S</text>
+          <line x1="182" y1="20" x2="182" y2="30" stroke="currentColor" stroke-width="1.6"/>
+          <use href="#symRv" transform="translate(172,30)"/>
+          <text x="197" y="58" class="cd-lbl">RD</text><text x="197" y="71" class="cd-val">3 kΩ</text>
+          <line x1="182" y1="178" x2="182" y2="188" stroke="currentColor" stroke-width="1.6"/>
+          <use href="#symRv" transform="translate(172,188)"/>
+          <text x="197" y="216" class="cd-lbl">RS</text><text x="197" y="229" class="cd-val">1 kΩ</text>
+          <line x1="182" y1="254" x2="182" y2="264" stroke="currentColor" stroke-width="1.6"/>
+          <use href="#symGnd" transform="translate(182,264)"/>
+        </svg>
+      </div>
+      <button class="btn small ghost reveal" aria-expanded="false">Show detailed solution</button>
+      <ol class="steps" hidden>
+        <li>No gate current flows, so the divider is unloaded: V<sub>G</sub> = V<sub>DD</sub>R<sub>G2</sub>/(R<sub>G1</sub>+R<sub>G2</sub>) = 12×1/3 = 4 V exactly.</li>
+        <li>Assume saturation and write V<sub>GS</sub> = V<sub>G</sub> − I<sub>D</sub>R<sub>S</sub>, then I<sub>D</sub> = ½k<sub>n</sub>(V<sub>GS</sub>−V<sub>t</sub>)².</li>
+        <li>Substituting (I<sub>D</sub> in mA) gives a quadratic: I<sub>D</sub> = ½(3−I<sub>D</sub>)², i.e. I<sub>D</sub>² − 8I<sub>D</sub> + 9 = 0.</li>
+        <li>Solve: I<sub>D</sub> = (8 ± √28)/2 = 6.65 mA or 1.35 mA. The 6.65 mA root gives V<sub>GS</sub> &lt; V<sub>t</sub> (device would be off) — reject it, so I<sub>D</sub> ≈ 1.35 mA.</li>
+        <li>V<sub>GS</sub> = 4 − 1.35 = 2.65 V, so V<sub>OV</sub> = V<sub>GS</sub>−V<sub>t</sub> = 1.65 V.</li>
+        <li>V<sub>D</sub> = V<sub>DD</sub> − I<sub>D</sub>R<sub>D</sub> ≈ 7.94 V; V<sub>S</sub> = I<sub>D</sub>R<sub>S</sub> ≈ 1.35 V; V<sub>DS</sub> = V<sub>D</sub>−V<sub>S</sub> ≈ 6.58 V.</li>
+        <li class="final">V<sub>DS</sub> (6.58 V) ≥ V<sub>OV</sub> (1.65 V), so saturation is confirmed. I<sub>D</sub> ≈ 1.35 mA, V<sub>DS</sub> ≈ 6.58 V.</li>
+      </ol>
+    </article>
+
+    <article class="adv-prob sheet" data-t="MOSFET" data-d="hard">
+      <div class="adv-top"><span class="tag">MOSFET</span><span class="diff diff-hard">Hard</span></div>
+      <p class="adv-q"><b>Q4.</b> Using the same NMOS and the same gate divider (R<sub>G1</sub> = 2 MΩ, R<sub>G2</sub> = 1 MΩ, V<sub>DD</sub> = 12 V) as Q3, <strong>design</strong> R<sub>S</sub> and R<sub>D</sub> so the transistor sits at I<sub>D</sub> = 1 mA and V<sub>DS</sub> = 6 V. Verify your design keeps it in saturation.</p>
+      <div class="circuit">
+        <svg viewBox="0 0 270 300" role="img" aria-label="Same NMOS gate-divider bias circuit, with RD and RS to be found" style="color:var(--ink)">
+          <line x1="40" y1="20" x2="220" y2="20" stroke="currentColor" stroke-width="1.6"/>
+          <text x="92" y="14" class="cd-rail">+V<tspan baseline-shift="sub" font-size="8">DD</tspan> = 12 V</text>
+          <circle cx="80" cy="20" r="2.3" fill="currentColor"/><circle cx="182" cy="20" r="2.3" fill="currentColor"/>
+          <line x1="80" y1="20" x2="80" y2="30" stroke="currentColor" stroke-width="1.6"/>
+          <use href="#symRv" transform="translate(70,30)"/>
+          <text x="95" y="58" class="cd-lbl">RG1</text><text x="95" y="71" class="cd-val">2 MΩ</text>
+          <line x1="80" y1="96" x2="80" y2="137" stroke="currentColor" stroke-width="1.6"/>
+          <circle cx="80" cy="137" r="2.3" fill="currentColor"/>
+          <line x1="80" y1="137" x2="80" y2="147" stroke="currentColor" stroke-width="1.6"/>
+          <use href="#symRv" transform="translate(70,147)"/>
+          <text x="95" y="175" class="cd-lbl">RG2</text><text x="95" y="188" class="cd-val">1 MΩ</text>
+          <line x1="80" y1="213" x2="80" y2="223" stroke="currentColor" stroke-width="1.6"/>
+          <use href="#symGnd" transform="translate(80,223)"/>
+          <line x1="80" y1="137" x2="150" y2="137" stroke="currentColor" stroke-width="1.6"/>
+          <text x="116" y="130" class="cd-term">G</text>
+          <use href="#symNmos" transform="translate(150,102)"/>
+          <text x="200" y="141" class="cd-lbl">M1</text>
+          <text x="182" y="90" class="cd-term">D</text><text x="182" y="182" class="cd-term">S</text>
+          <line x1="182" y1="20" x2="182" y2="30" stroke="currentColor" stroke-width="1.6"/>
+          <use href="#symRv" transform="translate(172,30)"/>
+          <text x="197" y="58" class="cd-lbl">RD</text><text x="197" y="71" class="cd-val">? (find)</text>
+          <line x1="182" y1="178" x2="182" y2="188" stroke="currentColor" stroke-width="1.6"/>
+          <use href="#symRv" transform="translate(172,188)"/>
+          <text x="197" y="216" class="cd-lbl">RS</text><text x="197" y="229" class="cd-val">? (find)</text>
+          <line x1="182" y1="254" x2="182" y2="264" stroke="currentColor" stroke-width="1.6"/>
+          <use href="#symGnd" transform="translate(182,264)"/>
+        </svg>
+      </div>
+      <button class="btn small ghost reveal" aria-expanded="false">Show detailed solution</button>
+      <ol class="steps" hidden>
+        <li>The gate voltage is unchanged from Q3: V<sub>G</sub> = 4 V (same divider, no gate current).</li>
+        <li>For I<sub>D</sub> = 1 mA in saturation: V<sub>OV</sub> = √(2I<sub>D</sub>/k<sub>n</sub>) = √(2×1/1) = 1.41 V, so V<sub>GS</sub> = V<sub>t</sub>+V<sub>OV</sub> = 2.41 V.</li>
+        <li>R<sub>S</sub> sets V<sub>GS</sub> from V<sub>G</sub>: R<sub>S</sub> = (V<sub>G</sub>−V<sub>GS</sub>)/I<sub>D</sub> = (4−2.41)/1 mA ≈ 1.59 kΩ.</li>
+        <li>V<sub>S</sub> = I<sub>D</sub>R<sub>S</sub> ≈ 1.59 V, and the target V<sub>DS</sub> = 6 V fixes V<sub>D</sub> = V<sub>S</sub>+V<sub>DS</sub> ≈ 7.59 V.</li>
+        <li>R<sub>D</sub> carries the same I<sub>D</sub> from V<sub>DD</sub>: R<sub>D</sub> = (V<sub>DD</sub>−V<sub>D</sub>)/I<sub>D</sub> = (12−7.59)/1 mA ≈ 4.41 kΩ.</li>
+        <li class="final">R<sub>S</sub> ≈ 1.59 kΩ, R<sub>D</sub> ≈ 4.41 kΩ. Check: V<sub>DS</sub> = 6 V ≥ V<sub>OV</sub> = 1.41 V, so saturation holds as assumed.</li>
+      </ol>
+    </article>
+
+    <article class="adv-prob sheet" data-t="Feedback" data-d="moderate">
+      <div class="adv-top"><span class="tag">Feedback</span><span class="diff diff-moderate">Moderate</span></div>
+      <p class="adv-q"><b>Q5.</b> A series-shunt feedback amplifier has open-loop gain A = 800 V/V, input resistance R<sub>i</sub> = 10 kΩ and output resistance R<sub>o</sub> = 200 Ω. The feedback network is a resistive divider with R1 = 1 kΩ and R2 = 9 kΩ. Find A<sub>f</sub>, R<sub>if</sub> and R<sub>of</sub>, and compare A<sub>f</sub> with the ideal value 1/β.</p>
+      <div class="circuit">
+        <svg viewBox="0 0 320 200" role="img" aria-label="Series-shunt voltage feedback block diagram" style="color:var(--ink)">
+          <line x1="10" y1="100" x2="54" y2="100" stroke="currentColor" stroke-width="1.6"/>
+          <polygon points="48,96 58,100 48,104" fill="currentColor"/>
+          <text x="12" y="92" class="cd-lbl">v<tspan baseline-shift="sub" font-size="8">s</tspan></text>
+          <circle cx="70" cy="100" r="16" class="cd-box"/>
+          <text x="53" y="90" class="cd-val">+</text><text x="58" y="122" class="cd-val">−</text>
+          <line x1="86" y1="100" x2="130" y2="100" stroke="currentColor" stroke-width="1.6"/>
+          <polygon points="124,96 134,100 124,104" fill="currentColor"/>
+          <text x="96" y="92" class="cd-val">v<tspan baseline-shift="sub" font-size="8">i</tspan></text>
+          <rect x="134" y="70" width="80" height="60" rx="4" class="cd-box"/>
+          <text x="174" y="96" class="cd-lbl" text-anchor="middle">A</text>
+          <text x="174" y="112" class="cd-val" text-anchor="middle">800 V/V</text>
+          <line x1="214" y1="100" x2="260" y2="100" stroke="currentColor" stroke-width="1.6"/>
+          <polygon points="254,96 264,100 254,104" fill="currentColor"/>
+          <text x="228" y="92" class="cd-val">v<tspan baseline-shift="sub" font-size="8">o</tspan></text>
+          <circle cx="264" cy="100" r="2.3" fill="currentColor"/>
+          <line x1="264" y1="100" x2="300" y2="100" stroke="currentColor" stroke-width="1.6"/>
+          <line x1="264" y1="100" x2="264" y2="160" stroke="currentColor" stroke-width="1.6"/>
+          <line x1="264" y1="160" x2="214" y2="160" stroke="currentColor" stroke-width="1.6"/>
+          <rect x="134" y="145" width="80" height="30" rx="4" class="cd-box"/>
+          <text x="174" y="164" class="cd-lbl" text-anchor="middle">β = 0.1</text>
+          <line x1="134" y1="160" x2="70" y2="160" stroke="currentColor" stroke-width="1.6"/>
+          <line x1="70" y1="160" x2="70" y2="116" stroke="currentColor" stroke-width="1.6"/>
+          <polygon points="66,120 70,110 74,120" fill="currentColor"/>
+          <text x="26" y="150" class="cd-val">v<tspan baseline-shift="sub" font-size="8">f</tspan></text>
+        </svg>
+      </div>
+      <button class="btn small ghost reveal" aria-expanded="false">Show detailed solution</button>
+      <ol class="steps" hidden>
+        <li>Identify the topology: series-shunt (voltage) feedback, so β = R1/(R1+R2) = 1k/10k = 0.1.</li>
+        <li>Loop gain: Aβ = 800×0.1 = 80, so 1+Aβ = 81.</li>
+        <li>Closed-loop gain: A<sub>f</sub> = A/(1+Aβ) = 800/81 ≈ 9.88 V/V. The "ideal" value 1/β = 10 V/V is off by only ≈1.2%, because Aβ = 80 isn't quite ≫1.</li>
+        <li>Series mixing raises input resistance: R<sub>if</sub> = R<sub>i</sub>(1+Aβ) = 10k×81 = 810 kΩ.</li>
+        <li>Shunt sampling lowers output resistance: R<sub>of</sub> = R<sub>o</sub>/(1+Aβ) = 200/81 ≈ 2.47 Ω.</li>
+        <li class="final">A<sub>f</sub> ≈ 9.88 V/V, R<sub>if</sub> ≈ 810 kΩ, R<sub>of</sub> ≈ 2.47 Ω.</li>
+      </ol>
+    </article>
+
+    <article class="adv-prob sheet" data-t="Feedback" data-d="hard">
+      <div class="adv-top"><span class="tag">Feedback</span><span class="diff diff-hard">Hard</span></div>
+      <p class="adv-q"><b>Q6.</b> A series-series (transconductance) amplifier has open-loop G<sub>m</sub> = 500 mA/V, R<sub>i</sub> = 5 kΩ and R<sub>o</sub> = 20 kΩ. <strong>Design</strong> the feedback network β (a sensing resistance) so the closed-loop transconductance is exactly G<sub>mf</sub> = 25 mA/V, and find the resulting R<sub>if</sub> and R<sub>of</sub>.</p>
+      <div class="circuit">
+        <svg viewBox="0 0 320 200" role="img" aria-label="Series-series transconductance feedback block diagram" style="color:var(--ink)">
+          <line x1="10" y1="100" x2="54" y2="100" stroke="currentColor" stroke-width="1.6"/>
+          <polygon points="48,96 58,100 48,104" fill="currentColor"/>
+          <text x="12" y="92" class="cd-lbl">v<tspan baseline-shift="sub" font-size="8">s</tspan></text>
+          <circle cx="70" cy="100" r="16" class="cd-box"/>
+          <text x="53" y="90" class="cd-val">+</text><text x="58" y="122" class="cd-val">−</text>
+          <line x1="86" y1="100" x2="130" y2="100" stroke="currentColor" stroke-width="1.6"/>
+          <polygon points="124,96 134,100 124,104" fill="currentColor"/>
+          <text x="96" y="92" class="cd-val">v<tspan baseline-shift="sub" font-size="8">i</tspan></text>
+          <rect x="134" y="70" width="80" height="60" rx="4" class="cd-box"/>
+          <text x="174" y="96" class="cd-lbl" text-anchor="middle">G<tspan baseline-shift="sub" font-size="8">m</tspan></text>
+          <text x="174" y="112" class="cd-val" text-anchor="middle">500 mA/V</text>
+          <line x1="214" y1="100" x2="260" y2="100" stroke="currentColor" stroke-width="1.6"/>
+          <polygon points="254,96 264,100 254,104" fill="currentColor"/>
+          <text x="228" y="92" class="cd-val">i<tspan baseline-shift="sub" font-size="8">o</tspan></text>
+          <circle cx="264" cy="100" r="2.3" fill="currentColor"/>
+          <line x1="264" y1="100" x2="300" y2="100" stroke="currentColor" stroke-width="1.6"/>
+          <line x1="264" y1="100" x2="264" y2="160" stroke="currentColor" stroke-width="1.6"/>
+          <line x1="264" y1="160" x2="214" y2="160" stroke="currentColor" stroke-width="1.6"/>
+          <rect x="134" y="145" width="80" height="30" rx="4" class="cd-box"/>
+          <text x="174" y="164" class="cd-lbl" text-anchor="middle">β = 38 Ω</text>
+          <line x1="134" y1="160" x2="70" y2="160" stroke="currentColor" stroke-width="1.6"/>
+          <line x1="70" y1="160" x2="70" y2="116" stroke="currentColor" stroke-width="1.6"/>
+          <polygon points="66,120 70,110 74,120" fill="currentColor"/>
+          <text x="26" y="150" class="cd-val">v<tspan baseline-shift="sub" font-size="8">f</tspan></text>
+        </svg>
+      </div>
+      <button class="btn small ghost reveal" aria-expanded="false">Show detailed solution</button>
+      <ol class="steps" hidden>
+        <li>This is series-series (transconductance) feedback: it senses output current and feeds back a proportional voltage, so β has units of resistance (V/A).</li>
+        <li>To bring G<sub>m</sub> = 500 mA/V down to G<sub>mf</sub> = 25 mA/V: 1+G<sub>m</sub>β = G<sub>m</sub>/G<sub>mf</sub> = 500/25 = 20, so G<sub>m</sub>β = 19.</li>
+        <li>Solve for β: β = 19/G<sub>m</sub> = 19/(0.5 A/V) = 38 Ω — the value of the current-sensing feedback resistor.</li>
+        <li>Series-series feedback raises both R<sub>in</sub> and R<sub>out</sub> (matches "series raises resistance on both sides"): R<sub>if</sub> = R<sub>i</sub>(1+G<sub>m</sub>β) = 5k×20 = 100 kΩ.</li>
+        <li>R<sub>of</sub> = R<sub>o</sub>(1+G<sub>m</sub>β) = 20k×20 = 400 kΩ.</li>
+        <li class="final">β = 38 Ω, R<sub>if</sub> = 100 kΩ, R<sub>of</sub> = 400 kΩ.</li>
+      </ol>
+    </article>
+
+  </div>
 </section>
 
 <!-- THEORY -->
@@ -738,6 +1052,21 @@ document.getElementById('filters').addEventListener('click', e => {
   const c = e.target.closest('.chip'); if (!c) return;
   document.querySelectorAll('#filters .chip').forEach(x => x.classList.toggle('on', x === c));
   document.querySelectorAll('.prob').forEach(p => p.hidden = !(c.dataset.f === 'all' || p.dataset.t === c.dataset.f));
+});
+
+/* ---------- advanced (circuit) numericals ---------- */
+document.getElementById('advProblems').addEventListener('click', e => {
+  const b = e.target.closest('.reveal'); if (!b) return;
+  const art = b.closest('.adv-prob'), steps = art.querySelector('.steps'), items = steps.querySelectorAll('li');
+  const open = b.getAttribute('aria-expanded') === 'true';
+  if (open){ steps.hidden = true; items.forEach(li => li.classList.remove('show')); b.textContent = 'Show detailed solution'; b.setAttribute('aria-expanded', 'false'); return; }
+  steps.hidden = false; b.textContent = 'Hide solution'; b.setAttribute('aria-expanded', 'true');
+  items.forEach((li, i) => setTimeout(() => li.classList.add('show'), 90 + i * 220));
+});
+document.getElementById('advFilters').addEventListener('click', e => {
+  const c = e.target.closest('.chip'); if (!c) return;
+  document.querySelectorAll('#advFilters .chip').forEach(x => x.classList.toggle('on', x === c));
+  document.querySelectorAll('.adv-prob').forEach(p => p.hidden = !(c.dataset.f === 'all' || p.dataset.t === c.dataset.f));
 });
 
 /* ---------- theory ---------- */
